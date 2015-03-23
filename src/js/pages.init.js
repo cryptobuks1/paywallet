@@ -224,7 +224,7 @@ function initBalances() {
         //setTimeout(_detectOldWallet, 300);
 
       } else {
-        WALLET.refreshBTCBalances(false);
+        WALLET.refreshLTCBalances(false);
       }
 
       // FIX: replace buggy smartadmin dropdown menu for assets menu

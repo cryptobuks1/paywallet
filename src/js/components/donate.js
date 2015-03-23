@@ -10,10 +10,10 @@ function DonationViewModel() {
       validator: function (val, self) {
         var address = self.sourceAddress();
         var quantity = self.quantity();
-        if (self.donationCurrency() == 'XCP') {
-          return parseFloat(quantity) <= self.balancesXCP[address];
+        if (self.donationCurrency() == 'XPT') {
+          return parseFloat(quantity) <= self.balancesXPT[address];
         } else {
-          return parseFloat(quantity) <= self.balancesBTC[address];
+          return parseFloat(quantity) <= self.balancesLTC[address];
         }
       },
       message: i18n.t('quantity_exceeds_balance'),
@@ -24,10 +24,10 @@ function DonationViewModel() {
   self.shown = ko.observable(false);
   self.availableAddresses = ko.observableArray([]);
   self.sourceAddress = ko.observable(null).extend(quantityValidator);
-  self.balancesXCP = {};
-  self.balancesBTC = {};
+  self.balancesXPT = {};
+  self.balancesLTC = {};
 	self.quantity = ko.observable(null).extend(quantityValidator);
-  self.donationCurrency = ko.observable('BTC');
+  self.donationCurrency = ko.observable('LTC');
 
 
   self.validationModel = ko.validatedObservable({
@@ -47,17 +47,17 @@ function DonationViewModel() {
 
     // prepare source addresses
     self.availableAddresses([]);
-    self.balancesXCP = {};
+    self.balancesXPT = {};
     var addresses = WALLET.getAddressesList(true);
     var options = []
     for(var i = 0; i < addresses.length; i++) {
-      var btcBalance = WALLET.getBalance(addresses[i][0], 'BTC', true);
+      var ltcBalance = WALLET.getBalance(addresses[i][0], 'LTC', true);
       options.push({
         address: addresses[i][0], 
-        label: addresses[i][1] + ' (' + round(btcBalance, 2) + ' BTC / ' + round(addresses[i][2], 2) + ' XCP)'
+        label: addresses[i][1] + ' (' + round(ltcBalance, 2) + ' LTC / ' + round(addresses[i][2], 2) + ' XPT)'
       });
-      self.balancesBTC[addresses[i][0]] = btcBalance;
-      self.balancesXCP[addresses[i][0]] = addresses[i][2];
+      self.balancesLTC[addresses[i][0]] = ltcBalance;
+      self.balancesXPT[addresses[i][0]] = addresses[i][2];
     }
     self.availableAddresses(options);
   }

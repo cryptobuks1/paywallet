@@ -58,7 +58,7 @@ var CURRENT_PAGE_URL = ''; // set in loadUrl()
 
 //selective disablement
 var DISABLED_FEATURES_SUPPORTED = ['betting', 'rps', 'dividend', 'exchange', 'leaderboard', 'portfolio', 'stats', 'history']; //what can be disabled
-var DISABLED_FEATURES = []; //set in counterwallet.js
+var DISABLED_FEATURES = []; //set in paywallet.js
 
 // restricted action
 var RESTRICTED_AREA = {
@@ -71,11 +71,11 @@ var RESTRICTED_AREA = {
 }
 
 var RESTRICTED_AREA_MESSAGE = {
-  'pages/simplebuy.html': 'buy_xcp_if_legal'
+  'pages/simplebuy.html': 'buy_xpt_if_legal'
 }
 
 var MAX_SUPPORT_CASE_PROBLEM_LEN = 4096;
-var QUOTE_ASSETS = []; // initalized with counterblock is_ready()
+var QUOTE_ASSETS = []; // initalized with payblock is_ready()
 
 var QUICK_BUY_ENABLE = false;
 var BETTING_ENABLE = true;

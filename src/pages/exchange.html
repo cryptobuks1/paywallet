@@ -32,7 +32,7 @@
 
   <div class="alert alert-warning">
     <i class="fa-fw fa fa-exchange"></i>
-    <span data-bind="locale: 'btc_trading_off'"></span>
+    <span data-bind="locale: 'ltc_trading_off'"></span>
   </div>
 
   <div class="alert alert-info">
@@ -89,8 +89,8 @@
                       <div style="padding-top:10px">
                         <label for="asset2" class="control-label font-medlg"  data-blind="locale: 'token_2'"></label>
                         <div class="btn-group buySellBtnGroup" data-toggle="buttons" style="margin-bottom:0">
-                          <label class="radioBtn btn" data-bind="css: { 'btn-success': selectedQuoteAsset() == 'XCP', 'active': selectedQuoteAsset() == 'XCP'}">
-                            <input type="radio" value="XCP" data-bind="btnGroupChecked: selectedQuoteAsset">XCP</label>
+                          <label class="radioBtn btn" data-bind="css: { 'btn-success': selectedQuoteAsset() == 'XPT', 'active': selectedQuoteAsset() == 'XPT'}">
+                            <input type="radio" value="XPT" data-bind="btnGroupChecked: selectedQuoteAsset">XPT</label>
                           <label class="radioBtn btn" data-bind="css: { 'btn-success': selectedQuoteAsset() == 'Other', 'active': selectedQuoteAsset() == 'Other'}">
                             <input type="radio" value="Other" data-bind="btnGroupChecked: selectedQuoteAsset">Other</label>
                         </div>
@@ -263,7 +263,7 @@
                               <td data-bind="html: total"></td>
                               <td data-bind="text: completion"></td>
                               <td>
-                                <a class="btn btn-default btn-xs" data-bind="click: $parent.cancelOrder, locale: 'cancel', attr: {'id': 'btcancel_' + tx_hash}, css: {disabled: cancelled }"></a>
+                                <a class="btn btn-default btn-xs" data-bind="click: $parent.cancelOrder, locale: 'cancel', attr: {'id': 'ltcancel_' + tx_hash}, css: {disabled: cancelled }"></a>
                               </td>
                           </tr>
                       </tbody>
@@ -365,7 +365,7 @@
                         <label class="control-label nopad col-xs-6" data-bind="locale: 'miners_fee'"></label>
                         <div class="col-xs-6 number" data-bind="text: buyFee"></div>
                       </div></td>
-                      <td>BTC</td>
+                      <td>LTC</td>
                     </tr>
                     <tr>
                       <td colspan="2">
@@ -373,7 +373,7 @@
                         <label class="control-label nopad col-xs-6" data-bind="locale: 'redeemable_fee'"></label>
                         <div class="col-xs-6 number" data-bind="text: buyRedeemableFee"></div>
                       </div></td>
-                      <td>BTC</td>
+                      <td>LTC</td>
                     </tr>
                     <tr>
                       <td colspan="3" style="text-align:center"><a id="buyButton" class="btn btn-default btn-lg" data-bind="click: buy">Buy (<span data-bind="text: quoteAsset + '→' + baseAsset"></span>)</a></td>
@@ -474,7 +474,7 @@
                         <label class="control-label nopad col-xs-6" data-bind="locale: 'miners_fee'"></label>
                         <div class="col-xs-6 number" data-bind="text: sellFee"></div>
                       </div></td>
-                      <td>BTC</td>
+                      <td>LTC</td>
                     </tr>
                     <tr>
                       <td colspan="2">
@@ -482,7 +482,7 @@
                         <label class="control-label nopad col-xs-6" data-bind="locale: 'redeemable_fee'"></label>
                         <div class="col-xs-6 number" data-bind="text: sellRedeemableFee"></div>
                       </div></td>
-                      <td>BTC</td>
+                      <td>LTC</td>
                     </tr>
                     <tr>
                       <td colspan="3" style="text-align:center"><a id="sellButton" class="btn btn-default btn-lg" data-bind="click: sell"><span data-bind="locale: 'Sell'"></span> (<span data-bind="text:baseAsset + '→' + quoteAsset"></span>)</a></td>

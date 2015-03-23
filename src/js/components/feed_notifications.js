@@ -51,9 +51,9 @@ NotificationViewModel.calcText = function(category, message) {
       desc = i18n.t("notif_you_received", smartFormat(normalizeQuantity(message['quantity'], message['_divisible'])),
         message['asset'], getAddressLabel(message['source']), getAddressLabel(message['destination']));
     }
-  } else if(category == "btcpays" && (WALLET.getAddressObj(message['source']) || WALLET.getAddressObj(message['destination']))) {
-    desc = i18n.t("notif_btcpay_from", getAddressLabel(message['source']),  getAddressLabel(message['destination']),
-      smartFormat(normalizeQuantity(message['btc_amount'])));
+  } else if(category == "ltcpays" && (WALLET.getAddressObj(message['source']) || WALLET.getAddressObj(message['destination']))) {
+    desc = i18n.t("notif_ltcpay_from", getAddressLabel(message['source']),  getAddressLabel(message['destination']),
+      smartFormat(normalizeQuantity(message['ltc_amount'])));
   } else if(category == "burns" && WALLET.getAddressObj(message['source'])) {
     desc = i18n.t("notif_burn", getAddressLabel(message['source']), smartFormat(normalizeQuantity(message['burned'])),
       smartFormat(normalizeQuantity(message['earned'])));
@@ -61,7 +61,7 @@ NotificationViewModel.calcText = function(category, message) {
     desc = i18n.t("notif_order_cancelled", message['tx_index'], getAddressLabel(message['source']));
   } else if(category == "callbacks" || category == "dividend") {
     //See if any of our addresses own any of the specified asset, and if so, notify them of the callback or dividend
-    // NOTE that counterpartyd has automatically already adusted the balances of all asset holders...we just need to notify
+    // NOTE that paytokensd has automatically already adusted the balances of all asset holders...we just need to notify
     var addressesWithAsset = WALLET.getAddressesWithAsset(message['asset']);
     if(!addressesWithAsset.length) return;
     if(category == "callbacks") {
@@ -265,7 +265,7 @@ function NotificationFeedViewModel(initialCount) {
     //if the number of entries are over 40, remove the oldest one
     if(self.entries().length > 40) self.entries.pop();
     self.lastUpdated(new Date());
-    WALLET.refreshBTCBalances();
+    WALLET.refreshLTCBalances();
   }
 }
 

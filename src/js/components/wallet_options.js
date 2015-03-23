@@ -11,7 +11,7 @@ function WalletOptionsModalViewModel() {
   ]);
   
   //set these properties to null as PREFERENCES is not available until login happens (they will be formally set on login)
-  self.autoBTCPayEnabled = ko.observable(null);
+  self.autoLTCPayEnabled = ko.observable(null);
   self.selectedTheme = ko.observable(null);
   self.ORIG_PREFERENCES_JSON = null;
   

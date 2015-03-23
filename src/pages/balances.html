@@ -46,13 +46,13 @@
 <div id="oldWalletDetectedNotice" data-bind="fadeVisibleInOnly: WALLET.isOldWallet()" class="alert alert-warning alert-block">
     <i class="fa-fw fa fa-level-up"></i>
     <span data-bind="locale: 'old_wallet_detected'"></span>
-    <a href="https://forums.counterparty.co/index.php?topic=321.0" target="_blank" data-bind="locale: 'old_wallet_more_info'"></a>.
+    <a href="https://forums.paytokens.co/index.php?topic=321.0" target="_blank" data-bind="locale: 'old_wallet_more_info'"></a>.
 </div>
 
 <div class="alert alert-info" id="alertBuyXcp">
     <i class="fa-fw fa fa-exchange"></i>
-    <span data-bind="visible: !QUICK_BUY_ENABLE, locale: 'want_to_buy_xcp'"></span>
-    <span data-bind="visible: QUICK_BUY_ENABLE, locale: 'want_to_buy_xcp_with_quick_buy'"></span>
+    <span data-bind="visible: !QUICK_BUY_ENABLE, locale: 'want_to_buy_xpt'"></span>
+    <span data-bind="visible: QUICK_BUY_ENABLE, locale: 'want_to_buy_xpt_with_quick_buy'"></span>
 </div>
 
 <div id="gettingStartedNotice" data-bind="fadeVisibleInOnly: WALLET.isNew() && !WALLET.isOldWallet() && window._BALANCES_HAS_LOADED_ALREADY === undefined" class="alert alert-success alert-block">
@@ -101,7 +101,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-bind="locale: 'filter_by'"></a>
                         <ul class="dropdown-menu">
                           <li><a data-bind="click: showAllAssets, locale: 'show_all'" href="#"></a></li>
-                          <li><a data-bind="click: showBaseAssetsOnly, locale: 'show_xcp_btc'" href="#"></a></li>
+                          <li><a data-bind="click: showBaseAssetsOnly, locale: 'show_xpt_ltc'" href="#"></a></li>
                           <li><a data-bind="click: showMyAssetsOnly, locale: 'show_my_tokens'" href="#"></a></li>
                           <li><a data-bind="click: showOthersAssetsOnly, locale: 'show_other_tokens'" href="#"></a></li>
                         </ul>
@@ -121,13 +121,13 @@
           </header>
           <div> <!-- widget div-->
             <div class="widget-body" data-bind="attr: {'id': 'address-balances-' + ADDRESS}, foreach: filteredAssets"> <!-- widget content -->
-              <div class="asset-item" data-bind="attr: {'id': 'asset-' + ADDRESS + '-' + ASSET}, css: { btc: ASSET === 'BTC', xcp: ASSET === 'XCP', myasset: isMine(), othersasset: !isMine() && (ASSET !== 'BTC' && ASSET !== 'XCP') }">
+              <div class="asset-item" data-bind="attr: {'id': 'asset-' + ADDRESS + '-' + ASSET}, css: { ltc: ASSET === 'LTC', xpt: ASSET === 'XPT', myasset: isMine(), othersasset: !isMine() && (ASSET !== 'LTC' && ASSET !== 'XPT') }">
                 <div class="btn-group btn-group-dropup"> <!-- asset level action button -->
                   <button type="button" class="btn btn-default dropdown-toggle assetBtn"><span class="caret"></span></button>
                   <ul class="dropdown-menu" role="menu">
                     <li><a data-bind="visible: !$parent.IS_WATCH_ONLY, click: send, locale: 'send'" href="#"></a></li>
-                    <li><a data-bind="visible: ASSET !== 'BTC' && ASSET !== 'XCP', click: showInfo, locale: 'show_info'" href="#"></a></li>
-                    <li data-bind="visible: !$parent.IS_WATCH_ONLY && USE_TESTNET && ASSET === 'BTC'"><a data-bind="click: testnetBurn, locale: 'burn_for_xcp'" href="#"></a></li>
+                    <li><a data-bind="visible: ASSET !== 'LTC' && ASSET !== 'XPT', click: showInfo, locale: 'show_info'" href="#"></a></li>
+                    <li data-bind="visible: !$parent.IS_WATCH_ONLY && USE_TESTNET && ASSET === 'LTC'"><a data-bind="click: testnetBurn, locale: 'burn_for_xpt'" href="#"></a></li>
                     <li data-bind="visible: !$parent.IS_WATCH_ONLY && isMine() && !locked()"><a data-bind="click: issueAdditional, locale: 'issue_additional'" href="#"></a></li>
                     <li data-bind="visible: !$parent.IS_WATCH_ONLY && isMine()"><a data-bind="click: transfer, locale: 'transfer_ownership'" href="#"></a></li>
                     <li data-bind="visible: !$parent.IS_WATCH_ONLY && isMine() && !locked()"><a data-bind="click: lock, locale: 'lock_token_issuance'" href="#"></a></li>
@@ -257,7 +257,7 @@
             <label class="control-label col col-sm-2" data-bind="locale: 'send_to'"></label>
             <div class="col col-sm-10">
                 <label class="input"><i class="icon-append fa fa-tag"></i>
-                    <input name="destAddress" data-bind="value: destAddress, valueUpdate: 'input', attr: {placeholder: 'Enter Bitcoin address'}" type="text"/>
+                    <input name="destAddress" data-bind="value: destAddress, valueUpdate: 'input', attr: {placeholder: 'Enter Litecoin address'}" type="text"/>
                 </label>
                 <span class="invalid" data-bind="validationMessage: destAddress"></span>
             </div>
@@ -307,7 +307,7 @@
             <label class="control-label col col-sm-12" data-bind="locale: 'private_key_import'"></label>
             <div class="col col-sm-12">
                 <label class="input"><i class="icon-append fa fa-lock"></i>
-                    <input name="privateKey" data-bind="value: privateKey, valueUpdate: 'input', attr: {placeholder: 'Enter Bitcoin private key'}" type="text"/>
+                    <input name="privateKey" data-bind="value: privateKey, valueUpdate: 'input', attr: {placeholder: 'Enter Litecoin private key'}" type="text"/>
                 </label>
                 <span class="invalid" data-bind="validationMessage: privateKey"></span>
                 <div class="note" data-bind="locale: 'enter_unencrypted_private_key'"></div>
@@ -341,11 +341,11 @@
                 <div class="note" data-bind="locale: 'tokens_to_sweep_note'"></div>
             </div>
           </div></section>
-          <section data-bind="visible: notEnoughBTC() || addressForFeesBalance()>0"><div class="row">
+          <section data-bind="visible: notEnoughLTC() || addressForFeesBalance()>0"><div class="row">
             <label class="control-label col col-sm-12" data-bind="locale: 'private_key_pay_fees'"></label>
             <div class="col col-sm-12">
                 <label class="input"><i class="icon-append fa fa-lock"></i>
-                    <input name="privateKeyForFees" data-bind="value: privateKeyForFees, valueUpdate: 'input', attr: {placeholder: 'Enter Bitcoin private key'}" type="text"/>
+                    <input name="privateKeyForFees" data-bind="value: privateKeyForFees, valueUpdate: 'input', attr: {placeholder: 'Enter Litecoin private key'}" type="text"/>
                 </label>
                 <span class="invalid" data-bind="validationMessage: privateKeyForFees"></span>
                 <span class="note" data-bind="text: addressForFeesBalanceMessage, visible:addressForFeesBalanceMessage()!=''"></span>
@@ -434,29 +434,29 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" data-bind="click: hide" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" data-bind="locale: 'burn_btc_testnet'"></h4>
+        <h4 class="modal-title" data-bind="locale: 'burn_ltc_testnet'"></h4>
       </div>
       <div class="modal-body no-padding">
         <p class="formPadded">
-          <span data-bind="locale: 'create_xcp_testnet'"></span><br/><br/>
-          <span data-bind="visible: 1 - btcAlreadyBurned() > 0">
+          <span data-bind="locale: 'create_xpt_testnet'"></span><br/><br/>
+          <span data-bind="visible: 1 - ltcAlreadyBurned() > 0">
             <b data-bind="locale: 'burn_up_to', localeArgs: maxPossibleBurn()"></b>
           </span>
-          <span data-bind="visible: 1 - btcAlreadyBurned() <= 0">
+          <span data-bind="visible: 1 - ltcAlreadyBurned() <= 0">
             <b class="errorColor"><span data-bind="locale: 'already_burned'"></span></b>
           </span>
        </p>
        <form class="smart-form" data-bind="submit: doAction"><fieldset>
           <section><div class="row">
-            <label class="control-label col col-sm-2" data-bind="locale: 'btc_to_burn'"></label>
+            <label class="control-label col col-sm-2" data-bind="locale: 'ltc_to_burn'"></label>
             <div class="col col-sm-10">
                 <label class="input"><i class="icon-append fa fa-fire"></i>
-                    <input name="additionalIssue" data-bind="value: btcBurnQuantity, valueUpdate: 'input'" type="text"/>
+                    <input name="additionalIssue" data-bind="value: ltcBurnQuantity, valueUpdate: 'input'" type="text"/>
                 </label>
             </div>
           </div></section>
         </fieldset></form>
-        <p class="formPaddedBot bold" data-bind="fadeVisibleInOnly: validationModel.isValid(), locale: 'after_burning', localeArgs: dispQuantityXCPToBeCreated"></p>
+        <p class="formPaddedBot bold" data-bind="fadeVisibleInOnly: validationModel.isValid(), locale: 'after_burning', localeArgs: dispQuantityXPTToBeCreated"></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-bind="click: hide, locale: 'cancel'"></button>
@@ -502,7 +502,7 @@
         <h4 class="modal-title" data-bind="locale: 'create_issue_token'"></h4>
       </div>
       <div class="modal-body no-padding">
-        <p class="formPadded" data-bind="locale: 'asset_creation_fee_xcp', localeArgs: ASSET_CREATION_FEE_XCP"></p>
+        <p class="formPadded" data-bind="locale: 'asset_creation_fee_xpt', localeArgs: ASSET_CREATION_FEE_XPT"></p>
 
         <form class="smart-form" data-bind="submit: doAction"><fieldset>
           <section><div class="row">
@@ -771,7 +771,7 @@
             </div>
           </div></section>
         </fieldset></form>
-        <div class="formPaddedBot" data-bind="fadeVisibleInOnly: xcpBalRemainingPostCallIsSet, locale: 'xcp_bal_remaining_post_call', localeArgs: {0: dispCallPrice, 1: asset, 2: dispTotalIssued, 3: dispTotalOutstanding, 4: percentageToCall, 5: totalXCPPay, 6: dispXCPBalRemainingPostCallCss, 7: dispXCPBalRemainingPostCall, 8: dispUnitsToCallback, 9: asset, 10: dispUnitsAfterCallback, 11: asset}"></div>
+        <div class="formPaddedBot" data-bind="fadeVisibleInOnly: xptBalRemainingPostCallIsSet, locale: 'xpt_bal_remaining_post_call', localeArgs: {0: dispCallPrice, 1: asset, 2: dispTotalIssued, 3: dispTotalOutstanding, 4: percentageToCall, 5: totalXPTPay, 6: dispXPTBalRemainingPostCallCss, 7: dispXPTBalRemainingPostCall, 8: dispUnitsToCallback, 9: asset, 10: dispUnitsAfterCallback, 11: asset}"></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-bind="click: hide, locale: 'cancel'"></button>
