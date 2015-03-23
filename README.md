@@ -1,7 +1,7 @@
 Paywallet
 ================
 
-Online Webwallet for [Paytokens](http://www.paytokens.co).
+Online Webwallet for [Paytokens](https://paytokens.co).
 
 Originally based off of [Carbonwallet](http://www.carbonwallet.com) (however virtually all the original code has been removed or rewritten).
 
@@ -9,8 +9,8 @@ Originally based off of [Carbonwallet](http://www.carbonwallet.com) (however vir
 Production Systems
 -------------------
 
-* Mainnet: **[paywallet.co](https://www.paywallet.co/)**
-* Testnet: **[testnet.paywallet.co](https://testnet.paywallet.co/)**
+* Mainnet: **[wallet.paytokens.co](https://wallet.paytokens.co/)**
+* Testnet: **[testnet.paytokens.co](https://testnet.paytokens.co/)**
 
 
 Features
@@ -71,7 +71,7 @@ grunt freeze
 Setting up your own Paywallet Server
 -----------------------------------------
 
-See [this link](https://github.com/PaytokensXPT/paytokensd_build/blob/master/docs/SettingUpAFederatedNode.rst) for more info.
+See [this link](https://github.com/paytokens/paytokens_build/blob/master/docs/SettingUpAFederatedNode.rst) for more info.
 
 
 Licence
