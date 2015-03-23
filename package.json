@@ -6,7 +6,7 @@
   "main": "build/index.html",
   "repository": { 
     "type" : "git",
-    "url" : "https://github.com/PaytokensXPT/paywallet.git"
+    "url" : "https://github.com/paytokens/paywallet.git"
   },
   "dependencies": {
     "grunt": "0.4.1",
@@ -21,7 +21,7 @@
     "transifex": "1.4.2"
   },
   "scripts": {
-    "prepublish": "grunt"
+    "prepublish": "grunt --force"
   },
   "engine": "node >= 0.10"
 }
