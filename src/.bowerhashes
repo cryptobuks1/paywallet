@@ -63,6 +63,6 @@
     "src/vendors/paywebdeps/js/util.generic.js": "0d9687865326d350835b80b921fcfb54d539fe93cd60f03da6029fe609b8f9ef",
     "src/vendors/paywebdeps/js/util.analytics.js": "e2ae8dd7b29ab24b2b5265b139bd558a90b470eb639a6bd7ad1ffd29c4826a53",
     "src/vendors/paywebdeps/js/util.bitcore.js": "6662132373750042cef2a3c3fa4e65a58a65d3db2888ce73b48682a9b6c7898a",
-    "src/vendors/paywebdeps/js/util.api.js": "2e3d49075b361fd1c014b97958318d88986f6ce852753b4e1e2f22ba932c9c01",
+    "src/vendors/paywebdeps/js/util.api.js": "873720cbed78c28c8ecf3d03a2ad18be2cde182270841f68b56a394ce788e816",
     "src/vendors/paywebdeps/js/util.litecoin.js": "07957865ef9513f9ef4d3e37716eb4b7bc30070a420024a5d48ae6996fa28be8"
 }
