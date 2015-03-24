@@ -59,10 +59,10 @@
     "src/vendors/i18next/i18next.min.js": "436aed3d5ea5479c3069d26a2136599bd1e4b7e60ce4dd790c0146b911652422",
     "src/vendors/paywebdeps/js/external/mnemonic.js": "463b7bb1c2bc0cc3824106a4be68ea2ff166c667fbb39379a417ac2dda63a18a",
     "src/vendors/paywebdeps/js/external/qrcode.js": "3f7944d28ba419256acf5cdfc5300cf4d519f1f65065305e62e6080d4b8e53e1",
-    "src/vendors/paywebdeps/js/consts.js": "7e49c9c7aca1811c92e581ea11091ebb032d5a9a4a16e1992988272e26bbc936",
+    "src/vendors/paywebdeps/js/consts.js": "cb18afe9687ec91d9e6c486b428d34e6eb71506eda1e7fb1a759d388a8cd6a34",
     "src/vendors/paywebdeps/js/util.generic.js": "abad51f2aee2ae1e4ec35a826a8538f495167310d87eb60e12dfc05f9aba58aa",
     "src/vendors/paywebdeps/js/util.analytics.js": "e2ae8dd7b29ab24b2b5265b139bd558a90b470eb639a6bd7ad1ffd29c4826a53",
     "src/vendors/paywebdeps/js/util.bitcore.js": "6662132373750042cef2a3c3fa4e65a58a65d3db2888ce73b48682a9b6c7898a",
     "src/vendors/paywebdeps/js/util.api.js": "598a1ac6dfaff5c0713692ab33d7f46f4b864461e6312d7b5a275c3ebae628e4",
-    "src/vendors/paywebdeps/js/util.litecoin.js": "07957865ef9513f9ef4d3e37716eb4b7bc30070a420024a5d48ae6996fa28be8"
+    "src/vendors/paywebdeps/js/util.litecoin.js": "7adc602f0a6e3213a5c7fb0a5f07d06fadcc89bf60d03b05042419188644c766"
 }

@@ -7,7 +7,7 @@
         "underscore.string": "2.3.3",
         "bootstrap": "3.1.1",
         "smartadmin": "https://github.com/paytokens/paysmartadmin.git#801ec4a82ab3de47308d6b1aed5799d85e77ab90",
-        "paywebdeps": "https://github.com/paytokens/paywebdeps.git#36c610bc6f2ed7891c2bb32dec00e8d10a5d90b5",
+        "paywebdeps": "https://github.com/paytokens/paywebdeps.git#5949b87dd9a995b003dd49452896273853e893a4",
         "cryptojs": "https://crypto-js.googlecode.com/files/CryptoJS%20v3.1.2.zip",
         "rollbar": "1.1.7",
         "bootbox": "4.2.0",
