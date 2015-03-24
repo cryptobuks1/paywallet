@@ -10,7 +10,7 @@ Production Systems
 -------------------
 
 * Mainnet: **[wallet.paytokens.co](https://wallet.paytokens.co/)**
-* Testnet: **[testnet.paytokens.co](https://testnet.paytokens.co/)**
+* Preview: **[preview.paytokens.co](https://preview.paytokens.co/)** Unintended issues may happen
 
 
 Features
