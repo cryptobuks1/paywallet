@@ -109,7 +109,7 @@ function RpsViewModel() {
       self.addressesLabels[wallet_adressess[i][0]] = wallet_adressess[i][1];
       options.push({
         address: wallet_adressess[i][0], 
-        label: wallet_adressess[i][1] + ' (' + wallet_adressess[i][2] + ' XCP)'
+        label: wallet_adressess[i][1] + ' (' + wallet_adressess[i][2] + ' XPT)'
       });
       self.balances[wallet_adressess[i][0]] = wallet_adressess[i][2];
       if (wallet_adressess[i][2] > maxBalance) {
@@ -177,7 +177,7 @@ function RpsViewModel() {
       game['status_html'] = '<span class="label label-'+classes[data[i]['status']]+'">'+i18n.t(data[i]['status'])+'</span>';
       game['block_index'] = data[i]['block_index'];
       game['address_label'] = self.addressesLabels[data[i]['address']] || data[i]['address'];
-      game['wager'] = normalizeQuantity(data[i]['wager']) + ' XCP';
+      game['wager'] = normalizeQuantity(data[i]['wager']) + ' XPT';
       game['move_str'] = self.move_names[data[i]['move']];
       game['countermove_str'] = self.move_names[data[i]['counter_move']];
       if (data[i]['possible_moves'] == 3) {
@@ -244,7 +244,7 @@ function RpsViewModel() {
     }
 
     if (self.balances[self.sourceAddress()] < self.wager()) {
-      bootbox.alert(i18n.t("no_enough_xcp"));
+      bootbox.alert(i18n.t("no_enough_xpt"));
       return false;
     }
     var moveParams = self.generateMoveRandomHash(self.move().value);

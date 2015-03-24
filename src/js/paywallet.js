@@ -98,9 +98,9 @@ function initRollbar() {
   }
 }
 
-function loadCounterwalletConfigFromServer() {
+function loadPaywalletConfigFromServer() {
   //Request for the servers.json file, which should contain an array of API backends for us to use
-  $.getJSON("/counterwallet.conf.json", function(data) {
+  $.getJSON("/paywallet.conf.json", function(data) {
     assert(data && typeof data == "object" && data.hasOwnProperty("servers"), "Returned servers.json file does not contain valid JSON object");
     assert(data['servers'] && data['servers'] instanceof Array, "'servers' field in returned servers.json file is not an array");
     ROLLBAR_ACCESS_TOKEN = data['rollbarAccessToken'] || ''; 
@@ -134,9 +134,9 @@ function loadCounterwalletConfigFromServer() {
 }
 
 function needWarningOnExit() {
-  return (window.WALLET && WALLET.isSellingBTC()) ||
-         window.MESSAGE_FEED.sellBTCOrdersCount() ||
-         window.PENDING_ACTION_FEED.pendingSellBTCOrdersCount();
+  return (window.WALLET && WALLET.isSellingLTC()) ||
+         window.MESSAGE_FEED.sellLTCOrdersCount() ||
+         window.PENDING_ACTION_FEED.pendingSellLTCOrdersCount();
 }
 
 function warningOnExit() {
@@ -295,7 +295,7 @@ $(document).ready(function() {
   
   autoDropUpDropdowns();
   
-  loadCounterwalletConfigFromServer();
+  loadPaywalletConfigFromServer();
 
   window.onbeforeunload = warningOnExit;
 });

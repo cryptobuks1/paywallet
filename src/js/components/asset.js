@@ -1,14 +1,14 @@
 
 function AssetViewModel(props) {
-  //An address has 2 or more assets (BTC, XCP, and any others)
+  //An address has 2 or more assets (LTC, XPT, and any others)
   var self = this;
   self.ADDRESS = props['address']; //will not change
   self.ASSET = props['asset']; //assetID, will not change
   self.DIVISIBLE = props['divisible'] !== undefined ? props['divisible'] : true;
   self.owner = ko.observable(props['owner']);
   self.locked = ko.observable(props['locked'] !== undefined ? props['locked'] : false);
-  self.rawBalance = ko.observable(props['rawBalance'] || (self.ASSET == 'BTC' ? null : 0));
-  //^ raw (not normalized) (for BTC/XCP, default to null to show '??' instead of 0, until the balance is populated)
+  self.rawBalance = ko.observable(props['rawBalance'] || (self.ASSET == 'LTC' ? null : 0));
+  //^ raw (not normalized) (for LTC/XPT, default to null to show '??' instead of 0, until the balance is populated)
   self.rawSupply = ko.observable(props['rawSupply'] || 0); //raw
   self.SUPPLY = normalizeQuantity(self.rawSupply(), self.DIVISIBLE);
   self.holdersSupply = self.rawSupply() - self.rawBalance();
@@ -35,7 +35,7 @@ function AssetViewModel(props) {
   }
 
   self.isMine = ko.computed(function() {
-    if(self.ASSET == 'BTC' || self.ASSET == 'XCP') return null; //special value for BTC and XCP
+    if(self.ASSET == 'LTC' || self.ASSET == 'XPT') return null; //special value for LTC and XPT
     return self.owner() == self.ADDRESS;
   }, self);
   

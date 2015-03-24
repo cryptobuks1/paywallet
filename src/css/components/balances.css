@@ -101,8 +101,8 @@ div#showAssetInfoModal table tbody {
   margin-top: 2px;    
 }
 
-.asset-item.btc          { color: #a94442; background-color: #ebccd1; border-color: #c4aaaf; }
-.asset-item.xcp          { color: #3c763d; background-color: #d6e9c6; border-color: #b2c2a5; }
+.asset-item.ltc          { color: #a94442; background-color: #ebccd1; border-color: #c4aaaf; }
+.asset-item.xpt          { color: #3c763d; background-color: #d6e9c6; border-color: #b2c2a5; }
 .asset-item.myasset     { color: #8a6d3b; background-color: #f4dbab; border-color: #cfb991; }
 .asset-item.othersasset { color: #31708f; background-color: #bce8f1; border-color: #9fc4cc; }
 

@@ -11,7 +11,7 @@ function WalletOptionsModalViewModel() {
   ]);
   
   //set these properties to null as PREFERENCES is not available until login happens (they will be formally set on login)
-  self.autoBTCPayEnabled = ko.observable(null);
+  self.autoLTCPayEnabled = ko.observable(null);
   self.selectedTheme = ko.observable(null);
   self.ORIG_PREFERENCES_JSON = null;
   
@@ -26,16 +26,16 @@ function WalletOptionsModalViewModel() {
     isValidPositiveQuantityOrZero: self,
     max: 100
   }
-  self.minBTCFeeProvidedPct = ko.observable(FEE_FRACTION_DEFAULT_FILTER).extend(pctValidator);
-  self.maxBTCFeeRequiredPct = ko.observable(FEE_FRACTION_DEFAULT_FILTER).extend(pctValidator);
-  self.defaultBTCFeeProvidedPct = ko.observable(FEE_FRACTION_PROVIDED_DEFAULT_PCT).extend(pctValidator);
-  self.defaultBTCFeeRequiredPct = ko.observable(FEE_FRACTION_REQUIRED_DEFAULT_PCT).extend(pctValidator);
+  self.minLTCFeeProvidedPct = ko.observable(FEE_FRACTION_DEFAULT_FILTER).extend(pctValidator);
+  self.maxLTCFeeRequiredPct = ko.observable(FEE_FRACTION_DEFAULT_FILTER).extend(pctValidator);
+  self.defaultLTCFeeProvidedPct = ko.observable(FEE_FRACTION_PROVIDED_DEFAULT_PCT).extend(pctValidator);
+  self.defaultLTCFeeRequiredPct = ko.observable(FEE_FRACTION_REQUIRED_DEFAULT_PCT).extend(pctValidator);
 
   self.orderDefaultExpiration = ko.observable(ORDER_DEFAULT_EXPIRATION).extend({
     required: true,
     isValidPositiveInteger: self
   });
-  self.orderBTCSellDefaultExpiration = ko.observable(ORDER_BTCSELL_DEFAULT_EXPIRATION).extend({
+  self.orderLTCSellDefaultExpiration = ko.observable(ORDER_LTCSELL_DEFAULT_EXPIRATION).extend({
     required: true,
     isValidPositiveInteger: self
   });
@@ -49,12 +49,12 @@ function WalletOptionsModalViewModel() {
   });
 
   self.advancedOptionValidation = ko.validatedObservable({
-    minBTCFeeProvidedPct: self.minBTCFeeProvidedPct,
-    maxBTCFeeRequiredPct: self.maxBTCFeeRequiredPct,
-    defaultBTCFeeProvidedPct: self.defaultBTCFeeProvidedPct,
-    defaultBTCFeeRequiredPct: self.defaultBTCFeeRequiredPct,
+    minLTCFeeProvidedPct: self.minLTCFeeProvidedPct,
+    maxLTCFeeRequiredPct: self.maxLTCFeeRequiredPct,
+    defaultLTCFeeProvidedPct: self.defaultLTCFeeProvidedPct,
+    defaultLTCFeeRequiredPct: self.defaultLTCFeeRequiredPct,
     orderDefaultExpiration: self.orderDefaultExpiration,
-    orderBTCSellDefaultExpiration: self.orderBTCSellDefaultExpiration
+    orderLTCSellDefaultExpiration: self.orderLTCSellDefaultExpiration
   });
   
   self.dispMyCookiePresent = ko.computed(function() {
@@ -65,9 +65,9 @@ function WalletOptionsModalViewModel() {
     return cwURLs() ? cwURLs().join(', ') : i18n.t('unknown');
   }, self);
 
-  self.autoBTCPayEnabled.subscribeChanged(function(newVal, prevVal) {
+  self.autoLTCPayEnabled.subscribeChanged(function(newVal, prevVal) {
     assert(newVal === true || newVal === false);
-    PREFERENCES['auto_btcpay'] = newVal;
+    PREFERENCES['auto_ltcpay'] = newVal;
   });
   
   self.selectedTheme.subscribeChanged(function(newSelection, prevSelection) {
@@ -91,7 +91,7 @@ function WalletOptionsModalViewModel() {
     self.ORIG_PREFERENCES_JSON = JSON.stringify(PREFERENCES); //store to be able to tell if we need to update prefs on the server
 
     //display current settings into the options UI
-    self.autoBTCPayEnabled(PREFERENCES['auto_btcpay']);
+    self.autoLTCPayEnabled(PREFERENCES['auto_ltcpay']);
     self.selectedTheme(PREFERENCES['selected_theme']);
     
     //ghetto ass hack -- select2 will not set itself properly when using the 'optionsValue' option, but it will

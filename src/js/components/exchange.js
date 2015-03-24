@@ -7,7 +7,7 @@ var BuySellAddressInDropdownItemModel = function(address, label, asset, balance)
 
 ko.validation.rules['ordersIsExistingAssetName'] = {
   validator: function (asset, self) {
-    if(asset == 'XCP' || asset == 'BTC') return true;
+    if(asset == 'XPT' || asset == 'LTC') return true;
     var match = ko.utils.arrayFirst(self.allAssets(), function(item) {
       return item == asset;
     });
@@ -52,7 +52,7 @@ function ExchangeViewModel() {
 
   self.selectedQuoteAsset = ko.observable();
   self.selectedQuoteAsset.subscribe(function(value) {
-    if (value == 'BTC' || value == 'XCP') self.asset2(value);
+    if (value == 'LTC' || value == 'XPT') self.asset2(value);
     else self.asset2('');
   })
 
@@ -234,8 +234,8 @@ function ExchangeViewModel() {
     var give_quantity = denormalizeQuantity(self.sellAmount(), self.baseAssetIsDivisible());
     var fee_provided = MIN_FEE;
     
-    if (self.baseAsset() == 'BTC') {
-      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultBTCFeeProvidedPct()/100);
+    if (self.baseAsset() == 'LTC') {
+      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultLTCFeeProvidedPct()/100);
       fee_provided = Math.ceil(fee_provided);
     }
 
@@ -275,15 +275,15 @@ function ExchangeViewModel() {
     var fee_provided = MIN_FEE;
     var expiration = parseInt(WALLET_OPTIONS_MODAL.orderDefaultExpiration());
 
-    if (self.quoteAsset() == 'BTC') {
-      fee_required = mulFloat(get_quantity, WALLET_OPTIONS_MODAL.defaultBTCFeeRequiredPct()/100);
+    if (self.quoteAsset() == 'LTC') {
+      fee_required = mulFloat(get_quantity, WALLET_OPTIONS_MODAL.defaultLTCFeeRequiredPct()/100);
       fee_required = Math.ceil(fee_required);
     }
 
-    if (self.baseAsset() == 'BTC') {
-      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultBTCFeeProvidedPct()/100);
+    if (self.baseAsset() == 'LTC') {
+      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultLTCFeeProvidedPct()/100);
       fee_provided = Math.ceil(fee_provided);
-      expiration = parseInt(WALLET_OPTIONS_MODAL.orderBTCSellDefaultExpiration());
+      expiration = parseInt(WALLET_OPTIONS_MODAL.orderLTCSellDefaultExpiration());
     }
 
     var params = {
@@ -311,10 +311,10 @@ function ExchangeViewModel() {
 
       WALLET.showTransactionCompleteDialog(message + " " + i18n.t(ACTION_PENDING_NOTICE), message, armoryUTx);
        
-      //if the order involes selling BTC, then we want to notify the servers of our wallet_id so folks can see if our
-      // wallet is "online", in order to determine if we'd be able to best make the necessary BTCpay
-      if(self.baseAsset() == 'BTC' && addressType !== 'armory') {
-        multiAPI("record_btc_open_order", {'wallet_id': WALLET.identifier(), 'order_tx_hash': txHash});
+      //if the order involes selling LTC, then we want to notify the servers of our wallet_id so folks can see if our
+      // wallet is "online", in order to determine if we'd be able to best make the necessary LTCpay
+      if(self.baseAsset() == 'LTC' && addressType !== 'armory') {
+        multiAPI("record_ltc_open_order", {'wallet_id': WALLET.identifier(), 'order_tx_hash': txHash});
       }
     }
 
@@ -488,8 +488,8 @@ function ExchangeViewModel() {
     var give_quantity = denormalizeQuantity(self.buyTotal(), self.quoteAssetIsDivisible());
     var fee_provided = MIN_FEE;
 
-    if (self.quoteAsset() == 'BTC') {
-      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultBTCFeeProvidedPct()/100);
+    if (self.quoteAsset() == 'LTC') {
+      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultLTCFeeProvidedPct()/100);
       fee_provided = Math.ceil(fee_provided);
     }
 
@@ -535,15 +535,15 @@ function ExchangeViewModel() {
     var fee_provided = MIN_FEE;
     var expiration = parseInt(WALLET_OPTIONS_MODAL.orderDefaultExpiration());
 
-    if (self.baseAsset() == 'BTC') {
-      fee_required = mulFloat(get_quantity, WALLET_OPTIONS_MODAL.defaultBTCFeeRequiredPct()/100);
+    if (self.baseAsset() == 'LTC') {
+      fee_required = mulFloat(get_quantity, WALLET_OPTIONS_MODAL.defaultLTCFeeRequiredPct()/100);
       fee_required = Math.ceil(fee_required);
     }
 
-    if (self.quoteAsset() == 'BTC') {
-      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultBTCFeeProvidedPct()/100);
+    if (self.quoteAsset() == 'LTC') {
+      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultLTCFeeProvidedPct()/100);
       fee_provided = Math.ceil(fee_provided);
-      expiration = parseInt(WALLET_OPTIONS_MODAL.orderBTCSellDefaultExpiration());
+      expiration = parseInt(WALLET_OPTIONS_MODAL.orderLTCSellDefaultExpiration());
     }
 
     var params = {
@@ -571,10 +571,10 @@ function ExchangeViewModel() {
 
       WALLET.showTransactionCompleteDialog(message + " " + i18n.t(ACTION_PENDING_NOTICE), message, armoryUTx);
       
-      //if the order involes selling BTC, then we want to notify the servers of our wallet_id so folks can see if our
-      // wallet is "online", in order to determine if we'd be able to best make the necessary BTCpay
-      if(self.quoteAsset() == 'BTC' && addressType !== 'armory') {
-        multiAPI("record_btc_open_order", {'wallet_id': WALLET.identifier(), 'order_tx_hash': txHash});
+      //if the order involes selling LTC, then we want to notify the servers of our wallet_id so folks can see if our
+      // wallet is "online", in order to determine if we'd be able to best make the necessary LTCpay
+      if(self.quoteAsset() == 'LTC' && addressType !== 'armory') {
+        multiAPI("record_ltc_open_order", {'wallet_id': WALLET.identifier(), 'order_tx_hash': txHash});
       }
     }
 
@@ -608,7 +608,7 @@ function ExchangeViewModel() {
     message += '<tr><td><b>' + i18n.t('amount') + ': </b></td><td style="text-align:right">' + self.buyAmount() + '</td><td>' + self.baseAsset() + '</td></tr>';
     message += '<tr><td><b>' + i18n.t('total') + ': </b></td><td style="text-align:right">' + self.buyTotal() + '</td><td>' + self.quoteAsset() + '</td></tr>';
     message += '<tr><td><b>' + i18n.t('real_estimated_total') + ': </b></td><td style="text-align:right">' + estimatedTotalPrice + '</td><td>' + self.quoteAsset() + '</td></tr>';
-    if (self.quoteAsset() == 'BTC') {
+    if (self.quoteAsset() == 'LTC') {
       message += '<tr><td><b>' + i18n.t('provided_fee') + ': </b></td><td style="text-align:right">' + self.buyFee() + '</td><td>' + self.quoteAsset() + '</td></tr>';
       message += '<tr><td colspan="3"><i>' + i18n.t('these_fees_are_optional') + '</i></td></tr>';
     }
@@ -686,8 +686,8 @@ function ExchangeViewModel() {
       'asset1': self.asset1(),
       'asset2': self.asset2(),
       'addresses': WALLET.getAddressesList(),
-      'min_fee_provided': WALLET_OPTIONS_MODAL.minBTCFeeProvidedPct(),
-      'max_fee_required': WALLET_OPTIONS_MODAL.maxBTCFeeRequiredPct()
+      'min_fee_provided': WALLET_OPTIONS_MODAL.minLTCFeeProvidedPct(),
+      'max_fee_required': WALLET_OPTIONS_MODAL.maxLTCFeeRequiredPct()
     }
     failoverAPI('get_market_orders', params, self.displayOpenUserOrders);
   }
@@ -784,8 +784,8 @@ function ExchangeViewModel() {
     var buy_orders = [];
 
     for (var i in data['buy_orders']) {
-      if ((data['base_asset'] == 'BTC' && data['buy_orders'][i]['amount'] < BTC_ORDER_MIN_AMOUNT) || 
-          (data['quote_asset'] == 'BTC' && data['buy_orders'][i]['total'] < BTC_ORDER_MIN_AMOUNT) ||
+      if ((data['base_asset'] == 'LTC' && data['buy_orders'][i]['amount'] < LTC_ORDER_MIN_AMOUNT) || 
+          (data['quote_asset'] == 'LTC' && data['buy_orders'][i]['total'] < LTC_ORDER_MIN_AMOUNT) ||
           (data['sell_orders'].length > 0 && data['buy_orders'][i]['price'] >= data['sell_orders'][0]['price'])) {
         data['buy_orders'][i]['exclude'] = true;
       } else {
@@ -814,8 +814,8 @@ function ExchangeViewModel() {
     }
     base_depth = 0;
     for (var i in data['sell_orders']) {
-      if ((data['base_asset'] == 'BTC' && data['sell_orders'][i]['amount'] < BTC_ORDER_MIN_AMOUNT) || 
-          (data['quote_asset'] == 'BTC' && data['sell_orders'][i]['total'] < BTC_ORDER_MIN_AMOUNT)) {
+      if ((data['base_asset'] == 'LTC' && data['sell_orders'][i]['amount'] < LTC_ORDER_MIN_AMOUNT) || 
+          (data['quote_asset'] == 'LTC' && data['sell_orders'][i]['total'] < LTC_ORDER_MIN_AMOUNT)) {
         data['sell_orders'][i]['exclude'] = true;
       } else {
         if (base_depth == 0) {
@@ -865,7 +865,7 @@ function ExchangeViewModel() {
 
   self.selectMarket = function(item) {
     self.asset1(item.base_asset);
-    if (item.quote_asset == 'BTC' || item.quote_asset == 'XCP') {
+    if (item.quote_asset == 'LTC' || item.quote_asset == 'XPT') {
       self.selectedQuoteAsset(item.quote_asset);
     } else {
       self.selectedQuoteAsset('Other');
@@ -885,8 +885,8 @@ function ExchangeViewModel() {
     var params = {
       'asset1': self.asset2(),
       'asset2': self.asset1(),
-      'min_fee_provided': WALLET_OPTIONS_MODAL.minBTCFeeProvidedPct(),
-      'max_fee_required': WALLET_OPTIONS_MODAL.maxBTCFeeRequiredPct()
+      'min_fee_provided': WALLET_OPTIONS_MODAL.minLTCFeeProvidedPct(),
+      'max_fee_required': WALLET_OPTIONS_MODAL.maxLTCFeeRequiredPct()
     }
     failoverAPI('get_market_details', params, self.displayMarketDetails);
   }
@@ -897,7 +897,7 @@ function ExchangeViewModel() {
     
     //Get a list of all assets
     failoverAPI("get_asset_names", {}, function(data, endpoint) {
-      data = ['XCP', 'BTC'].concat(data);
+      data = ['XPT', 'LTC'].concat(data);
       self.allAssets(data);
       
       //Set up typeahead bindings manually for now (can't get knockout and typeahead playing well together...)
@@ -954,9 +954,9 @@ function ExchangeViewModel() {
 
     } else {
 
-      var message = i18n.t('cancel_consume_btc');
-      if (self.quoteAsset() == 'BTC' && order.type == 'BUY') {
-        message += '<br />' + i18n.t('we_recommend_to_use_xcp');
+      var message = i18n.t('cancel_consume_ltc');
+      if (self.quoteAsset() == 'LTC' && order.type == 'BUY') {
+        message += '<br />' + i18n.t('we_recommend_to_use_xpt');
       }
 
       bootbox.dialog({
@@ -1216,9 +1216,9 @@ function OpenOrdersViewModel() {
 
     } else {
 
-      var message = i18n.t('cancel_consume_btc');
-      if (order.give_quantity_str.indexOf('BTC') != -1) {
-        message += '<br />' + i18n.t('we_recommend_to_use_xcp');
+      var message = i18n.t('cancel_consume_ltc');
+      if (order.give_quantity_str.indexOf('LTC') != -1) {
+        message += '<br />' + i18n.t('we_recommend_to_use_xpt');
       }
 
       bootbox.dialog({

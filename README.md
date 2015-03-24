@@ -1,7 +1,7 @@
-Counterwallet
+Paywallet
 ================
 
-Online Webwallet for [Counterparty](http://www.counterparty.co).
+Online Webwallet for [Paytokens](http://www.paytokens.co).
 
 Originally based off of [Carbonwallet](http://www.carbonwallet.com) (however virtually all the original code has been removed or rewritten).
 
@@ -9,15 +9,15 @@ Originally based off of [Carbonwallet](http://www.carbonwallet.com) (however vir
 Production Systems
 -------------------
 
-* Mainnet: **[counterwallet.co](https://www.counterwallet.co/)**
-* Testnet: **[testnet.counterwallet.co](https://testnet.counterwallet.co/)**
+* Mainnet: **[paywallet.co](https://www.paywallet.co/)**
+* Testnet: **[testnet.paywallet.co](https://testnet.paywallet.co/)**
 
 
 Features
 ----------
 
 - Deterministic wallet addresses (BIP 32-based)
-- Supports the majority of Counterparty functionality
+- Supports the majority of Paytokens functionality
 - Fully-AJAX driven
 - Anonymous
 - Runs in the browser, with keys created in memory
@@ -68,10 +68,10 @@ grunt build
 grunt freeze
 ```
 
-Setting up your own Counterwallet Server
+Setting up your own Paywallet Server
 -----------------------------------------
 
-See [this link](https://github.com/CounterpartyXCP/counterpartyd_build/blob/master/docs/SettingUpAFederatedNode.rst) for more info.
+See [this link](https://github.com/PaytokensXPT/paytokensd_build/blob/master/docs/SettingUpAFederatedNode.rst) for more info.
 
 
 Licence

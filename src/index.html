@@ -2,9 +2,9 @@
 <html lang="en-us" style="background-color:#FFF">
   <head>
     <meta charset="utf-8">
-    <title>Counterwallet</title>
-    <meta content="Counterparty Wallet" name="description">
-    <meta content="Counterparty Developers" name="author">
+    <title>Paywallet</title>
+    <meta content="Paytokens Wallet" name="description">
+    <meta content="Paytokens Developers" name="author">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
@@ -13,21 +13,21 @@
       [FR] Ce site requiert Javascript. Veuillez l'activer et recharcher la page.
     </noscript>
 
-    <!-- build:css css/counterwallet-deps-min.css -->
+    <!-- build:css css/paywallet-deps-min.css -->
     <link rel="stylesheet" type="text/css" media="screen" href="vendors/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="vendors/font-awesome/css/font-awesome.min.css">
     <!-- SmartAdmin Styles -->
     <link rel="stylesheet" type="text/css" media="screen" href="vendors/smartadmin/css/smartadmin-production.css">
     <link rel="stylesheet" type="text/css" media="screen" href="vendors/smartadmin/css/smartadmin-skins.css">
-    <!-- Counterwallet plugin styles -->
+    <!-- Paywallet plugin styles -->
     <link rel="stylesheet" type="text/css" href="vendors/jReject/css/jquery.reject.css">
     <link rel="stylesheet" type="text/css" href="vendors/keyboard/css/keyboard.css">
     <link rel="stylesheet" type="text/css" href="vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" type="text/css" href="vendors/select2/select2-bootstrap.css">
     <!-- endbuild -->
 
-    <!-- Counterwallet custom styles -->
-    <!-- build:css css/counterwallet-min.css -->
+    <!-- Paywallet custom styles -->
+    <!-- build:css css/paywallet-min.css -->
     <link rel="stylesheet" type="text/css" media="screen" href="vendors/counterwebdeps/css/default.css">
     <link rel="stylesheet" type="text/css" media="screen" href="css/overrides.css">
     <link rel="stylesheet" type="text/css" media="screen" href="css/misc.css">
@@ -81,7 +81,7 @@
     <header id="header" style="display: none">
       <div id="logo-group">
 
-        <span id="logo"><span class="logoText" data-bind="locale: 'counterwallet'"></span></span>
+        <span id="logo"><span class="logoText" data-bind="locale: 'paywallet'"></span></span>
 
         <span id="notificationFeed" class="activity-parent" data-contenturl="pages/feed_notifications.html" data-bind="click: ack">
             <span class="activity-dropdown">
@@ -105,12 +105,12 @@
             </div> <!-- .ajax-dropdown -->
         </span>
 
-        <span id="btcPayFeed" data-bind="fadeVisible: dispCount()" class="activity-parent" data-contenturl="pages/feed_btcpays.html">
+        <span id="ltcPayFeed" data-bind="fadeVisible: dispCount()" class="activity-parent" data-contenturl="pages/feed_ltcpays.html">
             <span class="activity-dropdown">
-                <i class="fa fa-btc"></i><b data-bind="text: dispCount()" class="badge badge-error"></b>
+                <i class="fa fa-ltc"></i><b data-bind="text: dispCount()" class="badge badge-error"></b>
             </span>
             <div class="ajax-dropdown">
-              <h2 data-bind="locale: 'required_btc_pays'"></h2>
+              <h2 data-bind="locale: 'required_ltc_pays'"></h2>
               <div class="ajax-notifications custom-scroll"></div> <!-- notification content -->
               <span><b data-bind="locale: 'last_updated'"></b> <span id="pendingBtcPayLastUpdated" data-bind="timeago: dispLastUpdated()"></span></span> <!-- footer -->
             </div> <!-- .ajax-dropdown -->
@@ -356,7 +356,7 @@
         <span data-bind="locale: 'welcome'"></span>
         <span data-bind="visible: USE_TESTNET, locale: 'testnet'"></span>
       </h1>
-      <h2 data-bind="locale: 'powered_by_counterparty'"></h2>
+      <h2 data-bind="locale: 'powered_by_paytokens'"></h2>
       <div id="form-well">
 
         <div id="createNewAcctBtnPane">
@@ -407,28 +407,28 @@
       </div> <!-- form-well -->
 
        <div id="extra-info" class="container">
-        <h3 class="sales-title margin-bottom-10" data-bind="locale: 'counterwallet_desc_1'"></h3>
+        <h3 class="sales-title margin-bottom-10" data-bind="locale: 'paywallet_desc_1'"></h3>
         <div class="row">
           <div class="col-sm-4 col-md-4">
             <h4 class="margin-bottom-10">
-              <i class="fa fa-lock"></i> <span data-bind="locale: 'counterwallet_desc_3'"></span>
+              <i class="fa fa-lock"></i> <span data-bind="locale: 'paywallet_desc_3'"></span>
             </h4>
-            <p data-bind="locale: 'counterwallet_desc_4'"></p>
-            <p data-bind="locale: 'counterwallet_desc_5'"></p>
+            <p data-bind="locale: 'paywallet_desc_4'"></p>
+            <p data-bind="locale: 'paywallet_desc_5'"></p>
           </div>
           <div class="col-sm-4 col-md-4">
             <h4 class="margin-bottom-10">
-              <i class="fa fa-cloud"></i> <span data-bind="locale: 'counterwallet_desc_6'"></span>
+              <i class="fa fa-cloud"></i> <span data-bind="locale: 'paywallet_desc_6'"></span>
             </h4>
-            <p data-bind="locale: 'counterwallet_desc_7'"></p>
-            <p data-bind="locale: 'counterwallet_desc_8'"></p>
+            <p data-bind="locale: 'paywallet_desc_7'"></p>
+            <p data-bind="locale: 'paywallet_desc_8'"></p>
           </div>
           <div class="col-sm-4 col-md-4">
             <h4 class="margin-bottom-10">
-              <i class="fa fa-globe"></i>  <span data-bind="locale: 'counterwallet_desc_9'"></span>
+              <i class="fa fa-globe"></i>  <span data-bind="locale: 'paywallet_desc_9'"></span>
             </h4>
-            <p data-bind="locale: 'counterwallet_desc_10'"></p>
-            <p data-bind="locale: 'counterwallet_desc_11'"></p>
+            <p data-bind="locale: 'paywallet_desc_10'"></p>
+            <p data-bind="locale: 'paywallet_desc_11'"></p>
           </div>
         </div>
       </div>
@@ -587,13 +587,13 @@
                 <fieldset data-bind="visible: showAdvancedOptions">
                   <section>
                     <div class="row">
-                      <div class="col col-sm-2" data-bind="locale: 'auto_btcpay'"></div>
+                      <div class="col col-sm-2" data-bind="locale: 'auto_ltcpay'"></div>
                       <div class="col col-sm-10">
                         <label class="checkbox">
-                          <input name="autoBTCPayEnabled" type="checkbox" data-bind="checked: autoBTCPayEnabled">
-                          <span data-bind="locale: 'enable_auto_btcpay'"></span>
+                          <input name="autoLTCPayEnabled" type="checkbox" data-bind="checked: autoLTCPayEnabled">
+                          <span data-bind="locale: 'enable_auto_ltcpay'"></span>
                         </label>
-                        <div class="note" data-bind="locale: 'enable_auto_btcpay_desc'">
+                        <div class="note" data-bind="locale: 'enable_auto_ltcpay_desc'">
                           
                         </div>
                       </div>
@@ -615,13 +615,13 @@
                       <div class="col col-sm-6">
                         <label class="label" data-bind="locale: 'default_fee_provided'"></label>
                         <label class="input"> <i class="icon-append">%</i>
-                          <input class="prefFieldPercent" name="defaultBTCFeeProvidedPct" type="text" data-bind="value: defaultBTCFeeProvidedPct">
+                          <input class="prefFieldPercent" name="defaultLTCFeeProvidedPct" type="text" data-bind="value: defaultLTCFeeProvidedPct">
                         </label>
                       </div>
                       <div class="col col-sm-6">
                         <label class="label" data-bind="locale: 'fee_provided_filter'"></label>
                         <label class="input"> <i class="icon-append">%</i>
-                          <input class="prefFieldPercent" name="minBTCFeeProvidedPct" type="text" data-bind="value: minBTCFeeProvidedPct">
+                          <input class="prefFieldPercent" name="minLTCFeeProvidedPct" type="text" data-bind="value: minLTCFeeProvidedPct">
                         </label>
                       </div>
                     </div>
@@ -631,13 +631,13 @@
                       <div class="col col-sm-6">
                         <label class="label" data-bind="locale: 'default_fee_required'"></label>
                         <label class="input"> <i class="icon-append">%</i>
-                          <input class="prefFieldPercent" name="defaultBTCFeeRequiredPct" type="text" data-bind="value: defaultBTCFeeRequiredPct">
+                          <input class="prefFieldPercent" name="defaultLTCFeeRequiredPct" type="text" data-bind="value: defaultLTCFeeRequiredPct">
                         </label>
                       </div>
                       <div class="col col-sm-6">
                         <label class="label" data-bind="locale: 'fee_required_filter'"></label>
                         <label class="input"> <i class="icon-append">%</i>
-                          <input class="prefFieldPercent" name="maxBTCFeeRequiredPct" type="text" data-bind="value: maxBTCFeeRequiredPct">
+                          <input class="prefFieldPercent" name="maxLTCFeeRequiredPct" type="text" data-bind="value: maxLTCFeeRequiredPct">
                         </label>
                       </div>
                     </div>
@@ -654,11 +654,11 @@
                         <div class="note" data-bind="locale: 'default_expiration_desc'"></div>
                       </div>
                       <div class="col col-sm-6">
-                        <label class="label" data-bind="locale: 'default_expiration_btc'"></label>
+                        <label class="label" data-bind="locale: 'default_expiration_ltc'"></label>
                         <label class="input">
-                          <input class="text-right" name="orderBTCSellDefaultExpiration" type="text" data-bind="value: orderBTCSellDefaultExpiration">
+                          <input class="text-right" name="orderLTCSellDefaultExpiration" type="text" data-bind="value: orderLTCSellDefaultExpiration">
                         </label>
-                        <div class="note" data-bind="locale: 'default_expiration_btc_desc'"></div>
+                        <div class="note" data-bind="locale: 'default_expiration_ltc_desc'"></div>
                       </div>
                     </div>
                   </section>
@@ -748,18 +748,18 @@
             <div data-bind="visible: type == 'balancesPage'">
                 <h5 data-bind="locale: 'answers_to_common_questions'"></h5>
                 <ul>
-                    <li><a href="https://support.counterparty.io/support/solutions/articles/5000003512-i-logged-in-and-my-address-is-different-and-i-have-no-balance-" target="_blank" data-bind="locale: 'answer_1'"></a></li>
-                    <li><a href="https://support.counterparty.io/support/solutions/articles/5000003515-i-sent-funds-to-a-crowdsale-vending-machine-why-don-t-they" target="_blank" data-bind="locale: 'answer_2'"></a></li>
-                    <li><a href="https://support.counterparty.io/support/solutions/articles/5000003518-i-sent-btc-to-counterwallet-why-doesn-t-it-show" target="_blank" data-bind="locale: 'answer_3'"></a></li>
+                    <li><a href="https://support.paytokens.io/support/solutions/articles/5000003512-i-logged-in-and-my-address-is-different-and-i-have-no-balance-" target="_blank" data-bind="locale: 'answer_1'"></a></li>
+                    <li><a href="https://support.paytokens.io/support/solutions/articles/5000003515-i-sent-funds-to-a-crowdsale-vending-machine-why-don-t-they" target="_blank" data-bind="locale: 'answer_2'"></a></li>
+                    <li><a href="https://support.paytokens.io/support/solutions/articles/5000003518-i-sent-ltc-to-paywallet-why-doesn-t-it-show" target="_blank" data-bind="locale: 'answer_3'"></a></li>
                     <br/>
-                    <li><a href="https://support.counterparty.io/support/solutions/articles/5000003514-why-do-i-need-small-amounts-of-bitcoin-to-do" target="_blank" data-bind="locale: 'answer_4'"></a></li>
-                    <li><a href="https://support.counterparty.io/support/solutions/articles/5000003519-address-i-added-in-counterwallet-is-not-showing-" target="_blank" data-bind="locale: 'answer_5'"></a></li>
-                    <li><a href="https://support.counterparty.io/support/solutions/articles/5000003520-does-counterwallet-support-two-factor" target="_blank" data-bind="locale: 'answer_6'"></a></li>
-                    <li><a href="https://support.counterparty.io/support/solutions/articles/5000003516-how-do-i-get-support-for-counterwallet" target="_blank" data-bind="locale: 'answer_8'"></a></li>
+                    <li><a href="https://support.paytokens.io/support/solutions/articles/5000003514-why-do-i-need-small-amounts-of-litecoin-to-do" target="_blank" data-bind="locale: 'answer_4'"></a></li>
+                    <li><a href="https://support.paytokens.io/support/solutions/articles/5000003519-address-i-added-in-paywallet-is-not-showing-" target="_blank" data-bind="locale: 'answer_5'"></a></li>
+                    <li><a href="https://support.paytokens.io/support/solutions/articles/5000003520-does-paywallet-support-two-factor" target="_blank" data-bind="locale: 'answer_6'"></a></li>
+                    <li><a href="https://support.paytokens.io/support/solutions/articles/5000003516-how-do-i-get-support-for-paywallet" target="_blank" data-bind="locale: 'answer_8'"></a></li>
                 </ul>
                 <h5 class="margin-bottom-0">
                   <span data-bind="locale: 'for_other_questions'"></span> 
-                  <a href="https://forums.counterparty.io/index.php/board,13.0.html" target="_blank" data-bind="locale: 'counterparty_forums'"></a>.
+                  <a href="https://forums.paytokens.io/index.php/board,13.0.html" target="_blank" data-bind="locale: 'paytokens_forums'"></a>.
                 </h5>
                 <h5>
                   <span data-bind="locale: 'for_bugs'"></span>
@@ -769,16 +769,16 @@
             <div data-bind="visible: type == 'exchangePage'">
                 <h5 data-bind="locale: 'answers_to_common_questions'"></h5>
                 <ul>
-                    <li><a href="https://support.counterparty.io/support/solutions/articles/5000003522-what-does-something-like-xcp-btc-mean-in" target="_blank" data-bind="locale: 'answer_9'"></a></li>
-                    <li><a href="https://support.counterparty.io/support/solutions/articles/5000003513-i-placed-an-order-to-buy-btc-for-something-else-what-i-offered-was-removed-from-my-account-but-i" target="_blank" data-bind="locale: 'answer_11'"></a></li>
-                    <li><a href="https://support.counterparty.io/support/solutions/articles/5000003514-why-do-i-need-small-amounts-of-bitcoin-to-do" target="_blank" data-bind="locale: 'answer_12'"></a></li>
-                    <li><a href="http://support.counterparty.io/support/solutions/articles/5000049906-what-is-the-difference-between-miner-s-fee-and-redeemable" target="_blank" data-bind="locale: 'answer_13'"></a></li>
-                    <li><a href="http://support.counterparty.io/support/solutions/articles/5000051505-what-btc-sellers-on-the-counterparty-distributed-exchange-need-to" target="_blank" data-bind="locale: 'answer_14'"></a></li>
-                    <li><a href="http://support.counterparty.io/support/solutions/articles/5000003516-how-do-i-get-support-for-counterwallet" target="_blank" data-bind="locale: 'answer_8'"></a></li>
+                    <li><a href="https://support.paytokens.io/support/solutions/articles/5000003522-what-does-something-like-xpt-ltc-mean-in" target="_blank" data-bind="locale: 'answer_9'"></a></li>
+                    <li><a href="https://support.paytokens.io/support/solutions/articles/5000003513-i-placed-an-order-to-buy-ltc-for-something-else-what-i-offered-was-removed-from-my-account-but-i" target="_blank" data-bind="locale: 'answer_11'"></a></li>
+                    <li><a href="https://support.paytokens.io/support/solutions/articles/5000003514-why-do-i-need-small-amounts-of-litecoin-to-do" target="_blank" data-bind="locale: 'answer_12'"></a></li>
+                    <li><a href="http://support.paytokens.io/support/solutions/articles/5000049906-what-is-the-difference-between-miner-s-fee-and-redeemable" target="_blank" data-bind="locale: 'answer_13'"></a></li>
+                    <li><a href="http://support.paytokens.io/support/solutions/articles/5000051505-what-ltc-sellers-on-the-paytokens-distributed-exchange-need-to" target="_blank" data-bind="locale: 'answer_14'"></a></li>
+                    <li><a href="http://support.paytokens.io/support/solutions/articles/5000003516-how-do-i-get-support-for-paywallet" target="_blank" data-bind="locale: 'answer_8'"></a></li>
                 </ul>
                 <h5 class="margin-bottom-0">
                   <span data-bind="locale: 'for_other_questions'"></span>
-                  <a href="https://forums.counterparty.io/categories" target="_blank" data-bind="locale: 'counterparty_forums'"></a>.
+                  <a href="https://forums.paytokens.io/categories" target="_blank" data-bind="locale: 'paytokens_forums'"></a>.
                 </h5>
                 <h5>
                   <span data-bind="locale: 'for_bugs'"></span> 
@@ -827,11 +827,11 @@
                 </div>
                 <div class="col col-sm-4">
                   <div class="btn-group" data-toggle="buttons">
-                    <label class="radioBtn btn btn-lg" data-bind="css: { 'btn-success': donationCurrency() == 'BTC' }">
-                      <input type="radio" name="donationCurrency" value="BTC" data-bind="btnGroupChecked: donationCurrency">BTC
+                    <label class="radioBtn btn btn-lg" data-bind="css: { 'btn-success': donationCurrency() == 'LTC' }">
+                      <input type="radio" name="donationCurrency" value="LTC" data-bind="btnGroupChecked: donationCurrency">LTC
                     </label>
-                    <label class="radioBtn btn btn-lg" data-bind="css: { 'btn-success': donationCurrency() == 'XCP' }">
-                      <input type="radio" name="donationCurrency" value="XCP" data-bind="btnGroupChecked: donationCurrency">XCP
+                    <label class="radioBtn btn btn-lg" data-bind="css: { 'btn-success': donationCurrency() == 'XPT' }">
+                      <input type="radio" name="donationCurrency" value="XPT" data-bind="btnGroupChecked: donationCurrency">XPT
                     </label>
                   </div>
                 </div>
@@ -842,7 +842,7 @@
                   <span class="sellColor" data-bind="text: quantity"></span>
                   <span class="sellColor" data-bind="text: donationCurrency"></span>
                 </b>
-                <span data-bind="locale: 'to_support_counterparty'"></span>
+                <span data-bind="locale: 'to_support_paytokens'"></span>
               </p>
             </fieldset></form>
             <p class="formPaddedBot">
@@ -925,7 +925,7 @@
 
     </div>
 
-    <!-- build:js js/counterwallet-deps-min.js -->
+    <!-- build:js js/paywallet-deps-min.js -->
     <script src="vendors/underscore/underscore.js"></script>
     <script src="vendors/underscore.string/lib/underscore.string.js"></script>
     <script src="vendors/jquery/jquery.min.js"></script><!-- Jquery -->
@@ -1013,7 +1013,7 @@
 
 
     <!-- COUNTERWALLET JS INCLUDES -->
-    <!-- build:js js/counterwallet-min.js -->
+    <!-- build:js js/paywallet-min.js -->
 
     <!-- counterwebdeps -->
     <script src="vendors/counterwebdeps/js/external/mnemonic.js"></script>
@@ -1023,15 +1023,15 @@
     <script src="vendors/counterwebdeps/js/util.analytics.js"></script>
     <script src="vendors/counterwebdeps/js/util.bitcore.js"></script>
     <script src="vendors/counterwebdeps/js/util.api.js"></script>
-    <script src="vendors/counterwebdeps/js/util.bitcoin.js"></script>
+    <script src="vendors/counterwebdeps/js/util.litecoin.js"></script>
     <script src="vendors/counterwebdeps/js/util.knockout.js"></script>
 
-    <!-- counterwallet-specific -->
+    <!-- paywallet-specific -->
     <script src="js/locale.js"></script>
     <script src="js/consts.js"></script>
     <script src="js/util.js"></script>
-    <script src="js/counterwallet.js"></script>
-    <script src="js/counterblock.js"></script>
+    <script src="js/paywallet.js"></script>
+    <script src="js/payblock.js"></script>
     <script src="js/messagefeed.js"></script>
     <script src="js/components/wallet.js"></script>
     <script src="js/components/wallet_options.js"></script>
@@ -1041,7 +1041,7 @@
     <script src="js/components/misc.js"></script>
     <script src="js/components/feed_notifications.js"></script>
     <script src="js/components/feed_pending_actions.js"></script>
-    <script src="js/components/feed_btcpays.js"></script>
+    <script src="js/components/feed_ltcpays.js"></script>
     <script src="js/components/chatfeed.js"></script>
     <script src="js/components/balances.js"></script>
     <script src="js/components/balances_assets.js"></script>

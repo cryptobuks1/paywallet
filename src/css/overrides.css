@@ -72,7 +72,7 @@ span.logoText {
     margin: 0 !important;
 }
 
-/* Make Counterwallet word invisible in black top bar for low resolution */
+/* Make Paywallet word invisible in black top bar for low resolution */
 @media only screen and (max-width : 665px) {
   #logo span.logoText {
     display: none !important;
@@ -174,7 +174,7 @@ span.logoText {
 #openOrderFeed .ajax-dropdown {
     left: 141px;
 }
-#btcPayFeed .ajax-dropdown {
+#ltcPayFeed .ajax-dropdown {
     left: 181px;
 }
 
@@ -536,7 +536,7 @@ h1 span.localeTitle {
   font-size: 24px !important;
 }
 
-.smart-form .checkbox input[name=autoBTCPayEnabled] {
+.smart-form .checkbox input[name=autoLTCPayEnabled] {
   position: static !important;
   margin-top: 7px;
 }

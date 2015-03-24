@@ -26,7 +26,7 @@ function ChatLineViewModel(handle, text, is_op, is_private) {
 }
 
 function ChatFeedViewModel() {
-  //An address has 2 or more assets (BTC, XCP, and any others)
+  //An address has 2 or more assets (LTC, XPT, and any others)
   var self = this;
   self.lines = ko.observableArray([]);
   self.myLines = ko.observableArray([]);
@@ -55,7 +55,7 @@ function ChatFeedViewModel() {
   self.init = function() {
     //Start up the chat feed if necessary
     //Called at login time (we do it then instead of when displaying the chat window, so that we can use it to track
-    //which wallet IDs are online, which we use for showing orders with BTCPays that have a higher chance of being
+    //which wallet IDs are online, which we use for showing orders with LTCPays that have a higher chance of being
     //paid more quickly, and how many users are using the wallet, for instance)
     if(self.feedConnections.length) { //already initialized
       return;
@@ -500,7 +500,7 @@ function ChatSetHandleModalViewModel() {
     if ($('#startChatBtn').prop("disabled")) {
       return;
     }
-    //Save the handle back at counterblockd
+    //Save the handle back at payblockd
     multiAPI("store_chat_handle", {'wallet_id': WALLET.identifier(), 'handle': self.newHandle()}, function(data, endpoint) {
       self.hide();
       CHAT_FEED.showChat();

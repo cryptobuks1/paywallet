@@ -12,7 +12,7 @@
       <div class="jarviswidget defaultWidgetColor" data-widget-editbutton="false" data-widget-deletebutton="false">
         <header>
           <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-          <h3 data-bind="locale: 'recent_counterparty_transactions'"></h3>
+          <h3 data-bind="locale: 'recent_paytokens_transactions'"></h3>
           <ul class="nav nav-tabs pull-right in" id="myTab">
             <li class="active">
               <a data-toggle="tab" href="#wid-id-txnHistory"><i class="fa fa-table"></i> <span class="hidden-mobile hidden-tablet" data-bind="locale: 'recent_transactions'"></span></a>
@@ -55,7 +55,7 @@
                       <th data-bind="locale: 'source'"></th>
                       <th data-bind="locale: 'type'"></th>
                       <th data-bind="locale: 'description'"></th>
-                      <!--<th>BTCAmount</th>
+                      <!--<th>LTCAmount</th>
                       <th>Fee</th>-->
                     </tr>
                   </thead>
@@ -67,7 +67,7 @@
                       <td data-bind="html: dispSource()"></td>
                       <td data-bind="html: dispTxType()"></td>
                       <td data-bind="html: dispDescription()"></td>
-                      <!--<td data-bind="html: btcAmount"></td>
+                      <!--<td data-bind="html: ltcAmount"></td>
                       <td data-bind="html: fee"></td>-->
                     </tr>
                   </tbody>

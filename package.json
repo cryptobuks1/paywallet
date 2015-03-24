@@ -1,12 +1,12 @@
 {
-  "name": "counterwallet",
-  "description": "Counterwallet",
-  "author": "Counterparty development team",
+  "name": "paywallet",
+  "description": "Paywallet",
+  "author": "Paytokens development team",
   "version": "1.5.0",
   "main": "build/index.html",
   "repository": { 
     "type" : "git",
-    "url" : "https://github.com/CounterpartyXCP/counterwallet.git"
+    "url" : "https://github.com/paytokens/paywallet.git"
   },
   "dependencies": {
     "grunt": "0.4.1",
@@ -21,7 +21,7 @@
     "transifex": "1.4.2"
   },
   "scripts": {
-    "prepublish": "grunt"
+    "prepublish": "grunt --force"
   },
   "engine": "node >= 0.10"
 }

@@ -4,11 +4,11 @@ function MessageFeed() {
   self.lastMessageIndexReceived = ko.observable(0); //last message received from the message feed (socket.io) -- used to detect gaps
   self.failoverCurrentIndex = ko.observable(0); //last idx in the cwBaseURLs tried (used for socket.io failover)
   self.MESSAGE_QUEUE = [];
-  self.OPEN_ORDERS = []; // here only for sellBTCOrdersCount
+  self.OPEN_ORDERS = []; // here only for sellLTCOrdersCount
 
-  self.sellBTCOrdersCount = ko.computed(function() {
+  self.sellLTCOrdersCount = ko.computed(function() {
     return $.map(self.OPEN_ORDERS, function(item) {       
-        return ('BTC' == item['get_asset']) ? item : null;
+        return ('LTC' == item['get_asset']) ? item : null;
     }).length;
   }, self);
 
@@ -78,7 +78,7 @@ function MessageFeed() {
 
   self.resolvePendingRpsMatch = function(tx_hash, moveParam, rps_match, callback) {
 
-    // wait 10 secondes to avoid -22 bitcoind error
+    // wait 10 secondes to avoid -22 litecoind error
     setTimeout(function() {
       
       moveParam['rps_match_id'] = rps_match['id'];
@@ -149,7 +149,7 @@ function MessageFeed() {
     var filters = {'field': 'source', 'op': 'IN', 'value': addresses};
     failoverAPI("get_orders", {'filters': filters, 'show_expired': false, 'filterop': 'or'},
       function(data, endpoint) {
-        //do not show empty/filled orders, including open BTC orders that have 0/neg give remaining 
+        //do not show empty/filled orders, including open LTC orders that have 0/neg give remaining 
         self.OPEN_ORDERS = $.grep(data, function(e) { return e['status'] == 'open' && e['give_remaining'] > 0; });
       }
     );
@@ -264,7 +264,7 @@ function MessageFeed() {
     var displayTx = false;
     
     if (!WALLET.getAddressObj(message['bindings']['source'])) {
-      if (category=='sends' || category=='btcpays') {
+      if (category=='sends' || category=='ltcpays') {
         if (WALLET.getAddressObj(message['bindings']['destination'])) {
           displayTx = true;
         }
@@ -281,7 +281,7 @@ function MessageFeed() {
     }
 
     if (displayTx) {
-      var asset1 = message['bindings']['asset'] || 'BTC';
+      var asset1 = message['bindings']['asset'] || 'LTC';
       WALLET.getAssetsDivisibility([asset1], function(divisibility) {
 
         message['bindings']['divisible'] = divisibility[asset1];
@@ -375,7 +375,7 @@ function MessageFeed() {
       self.lastMessageIndexReceived(message['_last_message_index']);
       $.jqlog.warn("feed:Blockchain reorganization at block " + message['block_index']
         + "; last message idx reset to " + self.lastMessageIndexReceived());
-      setTimeout(function() { WALLET.refreshCounterpartyBalances(WALLET.getAddressesList(), checkURL); }, randomIntFromInterval(1, 5) * 1000);
+      setTimeout(function() { WALLET.refreshPaytokensBalances(WALLET.getAddressesList(), checkURL); }, randomIntFromInterval(1, 5) * 1000);
       //^ refresh the current page to regrab the fresh data (give cwd a second to sync up though)
       // also, wait a random interval to do this between 1 and 5 seconds, to avoid dog-piling the server
       //TODO/BUG??: do we need to "roll back" old messages on the bad chain???
@@ -383,7 +383,7 @@ function MessageFeed() {
     }
 
     //increment stored networkBlockHeight off of the feed, if possible (allows us to more quickly update this then
-    // just relying on 5 minute polling for new BTC balances)
+    // just relying on 5 minute polling for new LTC balances)
     if(message['block_index'])
       WALLET.networkBlockHeight(message['block_index']);
       
@@ -429,8 +429,8 @@ function MessageFeed() {
       //DO NOTHING
     } else if(category == "credits" || category == "debits") {
       if(WALLET.getAddressObj(message['address'])) {
-        //remove non-BTC/XCP asset objects that now have a zero balance from a debit
-        if(message['_balance'] == 0 && message['asset'] != "BTC" && message['asset'] != "XCP") {
+        //remove non-LTC/XPT asset objects that now have a zero balance from a debit
+        if(message['_balance'] == 0 && message['asset'] != "LTC" && message['asset'] != "XPT") {
           assert(category == "debits"); //a credit to a balance of zero?? Yes with unconfirmed balance>0
           var addressObj = WALLET.getAddressObj(message['address']);
           var assetObj = addressObj.getAssetObj(message['asset']);
@@ -446,12 +446,12 @@ function MessageFeed() {
       }
     } else if(category == "broadcasts") {
       //TODO
-    } else if(category == "btcpays") {
-      var btcpay = WAITING_BTCPAY_FEED.remove(message['order_match_id']);
-      //^ covers the case where make a BTC payment and log out before it is confirmed, then log back in and see it confirmed
-      if (btcpay) {
-        refreshEscrowedBalance.push(btcpay.BTCPAY_DATA['myAddr']);
-        refreshEscrowedBalance.push(btcpay.BTCPAY_DATA['btcDestAddr']);
+    } else if(category == "ltcpays") {
+      var ltcpay = WAITING_LTCPAY_FEED.remove(message['order_match_id']);
+      //^ covers the case where make a LTC payment and log out before it is confirmed, then log back in and see it confirmed
+      if (ltcpay) {
+        refreshEscrowedBalance.push(ltcpay.LTCPAY_DATA['myAddr']);
+        refreshEscrowedBalance.push(ltcpay.LTCPAY_DATA['ltcDestAddr']);
       }
     } else if(category == "burns") {
     } else if(category == "cancels") {
@@ -485,8 +485,8 @@ function MessageFeed() {
     } else if(category == "sends") {
       //the effects of a send are handled based on the credit and debit messages it creates, so nothing to do here
     } else if(category == "orders") {
-      if(message['_btc_below_dust_limit'])
-        return; //ignore any order involving BTC below the dust limit
+      if(message['_ltc_below_dust_limit'])
+        return; //ignore any order involving LTC below the dust limit
       
       //valid order statuses: open, filled, invalid, cancelled, and expired
       //update the give/get remaining numbers in the open orders listing, if it already exists
@@ -505,24 +505,24 @@ function MessageFeed() {
 
     } else if(category == "order_matches") {
 
-      if(message['_btc_below_dust_limit'])
-        return; //ignore any order match involving BTC below the dust limit
+      if(message['_ltc_below_dust_limit'])
+        return; //ignore any order match involving LTC below the dust limit
       
-      //Look to order matches when determining to do a BTCpay
+      //Look to order matches when determining to do a LTCpay
       //If the order_matches message doesn't have a tx0_address/tx1_address field, then we don't need to do anything with it
-      if ((WALLET.getAddressObj(message['tx0_address']) && message['forward_asset'] == 'BTC' && message['_status'] == 'pending')
-         || (WALLET.getAddressObj(message['tx1_address']) && message['backward_asset'] == 'BTC' && message['_status'] == 'pending')) {
-        //Register this as an "upcoming" BTCpay
-        var btcPayData = WaitingBTCPayFeedViewModel.makeBTCPayData(message); 
-        //Don't include in UPCOMING_BTCPAY_FEED BTCpays which are for less than the current (multisig) dust amount
-        if (btcPayData['btcQuantityRaw']>=MULTISIG_DUST_SIZE) {
-          UPCOMING_BTCPAY_FEED.add(btcPayData);
+      if ((WALLET.getAddressObj(message['tx0_address']) && message['forward_asset'] == 'LTC' && message['_status'] == 'pending')
+         || (WALLET.getAddressObj(message['tx1_address']) && message['backward_asset'] == 'LTC' && message['_status'] == 'pending')) {
+        //Register this as an "upcoming" LTCpay
+        var ltcPayData = WaitingLTCPayFeedViewModel.makeLTCPayData(message); 
+        //Don't include in UPCOMING_LTCPAY_FEED LTCpays which are for less than the current (multisig) dust amount
+        if (ltcPayData['ltcQuantityRaw']>=MULTISIG_DUST_SIZE) {
+          UPCOMING_LTCPAY_FEED.add(ltcPayData);
         } else {
-          $.jqlog.debug("dust order_matches "+btcPayData['orderMatchID']+" : "+btcPayData['btcQuantityRaw']);
+          $.jqlog.debug("dust order_matches "+ltcPayData['orderMatchID']+" : "+ltcPayData['ltcQuantityRaw']);
         }  
         
-      } else if ((WALLET.getAddressObj(message['tx1_address']) && message['forward_asset'] == 'BTC' && message['_status'] == 'pending')
-         || (WALLET.getAddressObj(message['tx0_address']) && message['backward_asset'] == 'BTC' && message['_status'] == 'pending')) {
+      } else if ((WALLET.getAddressObj(message['tx1_address']) && message['forward_asset'] == 'LTC' && message['_status'] == 'pending')
+         || (WALLET.getAddressObj(message['tx0_address']) && message['backward_asset'] == 'LTC' && message['_status'] == 'pending')) {
 
         PENDING_ACTION_FEED.add(txHash, category, message);
       }
@@ -533,14 +533,14 @@ function MessageFeed() {
     } else if(category == "order_expirations") {
       //Remove the order from the open orders list
       self.removeOrder(message['order_hash']);
-      WAITING_BTCPAY_FEED.remove(message['order_hash']); //just in case we had a BTC payment required for this order when it expired
+      WAITING_LTCPAY_FEED.remove(message['order_hash']); //just in case we had a LTC payment required for this order when it expired
 
       refreshEscrowedBalance.push(message['source']);
     
     } else if(category == "order_match_expirations") {
-      //Would happen if the user didn't make a BTC payment in time
-      WAITING_BTCPAY_FEED.remove(message['order_match_id']);
-      //^ just in case we had a BTC payment required for this order match when it expired
+      //Would happen if the user didn't make a LTC payment in time
+      WAITING_LTCPAY_FEED.remove(message['order_match_id']);
+      //^ just in case we had a LTC payment required for this order match when it expired
 
       refreshEscrowedBalance.push(message['tx0_address']);
       refreshEscrowedBalance.push(message['tx1_address']);

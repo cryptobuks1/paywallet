@@ -1,4 +1,4 @@
-//Counterwallet-specific utility functions
+//Paywallet-specific utility functions
 
 function formatHtmlPrice(price) {
   return parseFloat(price).toFixed(8).replace(/(0{0,8}$)/,'<span class="text-muted">$1</span>');
