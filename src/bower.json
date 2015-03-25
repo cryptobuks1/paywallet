@@ -34,7 +34,7 @@
         "typeahead.js": "0.10.2",
         "select2": "3.4.6",
         "font-awesome": "4.0.3",
-        "bitcore": "https://github.com/paytokens/litecore.git#ffa71f0a1ed52d729fbe60e186ea169456bcca25",
+        "bitcore": "https://github.com/paytokens/litecore.git#864b23c3854a471ab19e32e1f92be845b53e0f0f",
         "mocha": "1.18.2",
         "chai": "1.9.1",
         "iso8601-js-period": "https://github.com/nezasa/iso8601-js-period.git#v0.2.0.0",
