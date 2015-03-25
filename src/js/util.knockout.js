@@ -93,14 +93,14 @@ ko.bindingHandlers.datetimepicker = {
  */
 function createSharedKnockoutValidators() {
 
-  ko.validation.rules['isValidBitcoinAddress'] = {
+  ko.validation.rules['isValidLitecoinAddress'] = {
       validator: function (val, self) {
           return CWBitcore.isValidAddress(val);
       },
-      message: USE_TESTNET ? i18n.t('must_be_valid_testnet_address') : i18n.t('must_be_valid_bitcoin_address')
+      message: USE_TESTNET ? i18n.t('must_be_valid_testnet_address') : i18n.t('must_be_valid_litecoin_address')
   };
 
-  ko.validation.rules['isValidBitcoinAddressIfSpecified'] = {
+  ko.validation.rules['isValidLitecoinAddressIfSpecified'] = {
       validator: function (val, self) {
           try {
             if(!val) return true; //the "if specified" part of the name :)
@@ -109,7 +109,7 @@ function createSharedKnockoutValidators() {
             return false;
           }
       },
-      message: USE_TESTNET ? i18n.t('must_be_valid_testnet_address') : i18n.t('must_be_valid_bitcoin_address')
+      message: USE_TESTNET ? i18n.t('must_be_valid_testnet_address') : i18n.t('must_be_valid_litecoin_address')
   };
 
   ko.validation.rules['isValidQtyForDivisibility'] = {
@@ -122,7 +122,7 @@ function createSharedKnockoutValidators() {
       message: i18n.t('must_be_whole_number')
   };
 
-  ko.validation.rules['isNotSameBitcoinAddress'] = {
+  ko.validation.rules['isNotSameLitecoinAddress'] = {
       validator: function (val, self) {
         return val != self.address();
       },
@@ -160,10 +160,10 @@ function createSharedKnockoutValidators() {
       message: i18n.t('must_be_url')
   };
 
-  ko.validation.rules['isValidUrlOrValidBitcoinAdressOrJsonBet'] = {
+  ko.validation.rules['isValidUrlOrValidLitecoinAdressOrJsonBet'] = {
       validator: function (val, self) {
         if (!val) return false;
-        // regex to check url, make freeze Chrome when checking btc address
+        // regex to check url, make freeze Chrome when checking ltc address
         // TODO: change the way to check an url
         // return CWBitcore.isValidAddress(val) || isValidURL(val);
         if (val.length>50 || val.lastIndexOf('=') == val.length-1) {

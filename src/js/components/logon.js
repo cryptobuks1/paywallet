@@ -149,10 +149,10 @@ function LogonViewModel() {
       WALLET.identifier(hash);
       $.jqlog.log("My wallet ID: " + WALLET.identifier());
 
-      //Set initial block height (will be updated again on each periodic refresh of BTC account balances)
+      //Set initial block height (will be updated again on each periodic refresh of LTC account balances)
       WALLET.networkBlockHeight(data['block_height']);
       
-      //Initialize the socket.io-driven event feed (notifies us in realtime of new events, as counterparty processes confirmed blocks)
+      //Initialize the socket.io-driven event feed (notifies us in realtime of new events, as paytokens processes confirmed blocks)
       MESSAGE_FEED.init(data['last_message_index']);
       //^ set the "starting" message_index, under which we will ignore if received on the messages feed
 
@@ -168,10 +168,10 @@ function LogonViewModel() {
       // set quote assets
       QUOTE_ASSETS = data['quote_assets']
 
-      AUTO_BTC_ESCROW_ENABLE = data['auto_btc_escrow_enable'];
-      if (AUTO_BTC_ESCROW_ENABLE) {
-        ESCROW_COMMISSION = data['auto_btc_escrow']['commission_percentage'] / 100;
-        BTCPAY_FEE_RETAINER = denormalizeQuantity(data['auto_btc_escrow']['btcpay_fee_retainer']);
+      AUTO_LTC_ESCROW_ENABLE = data['auto_ltc_escrow_enable'];
+      if (AUTO_LTC_ESCROW_ENABLE) {
+        ESCROW_COMMISSION = data['auto_ltc_escrow']['commission_percentage'] / 100;
+        LTCPAY_FEE_RETAINER = denormalizeQuantity(data['auto_ltc_escrow']['ltcpay_fee_retainer']);
       }
 
       QUICK_BUY_ENABLE = data['quick_buy_enable'];
@@ -182,7 +182,7 @@ function LogonViewModel() {
     },
     function(jqXHR, textStatus, errorThrown, endpoint) {
       var message = describeError(jqXHR, textStatus, errorThrown);
-      bootbox.alert(i18n.t("no_counterparty_error", message));
+      bootbox.alert(i18n.t("no_paytokens_error", message));
     });
   }
 
@@ -259,8 +259,8 @@ function LogonViewModel() {
       }
 
       //Update/upgrade any specific pref settings
-      if(!AUTO_BTC_ESCROW_ENABLE && PREFERENCES['btcpay_method'] === 'autoescrow') {
-        PREFERENCES['btcpay_method'] = 'auto'; //no auto BTC services enabled
+      if(!AUTO_LTC_ESCROW_ENABLE && PREFERENCES['ltcpay_method'] === 'autoescrow') {
+        PREFERENCES['ltcpay_method'] = 'auto'; //no auto LTC services enabled
         mustSavePreferencesToServer = true;
       }
 
@@ -281,8 +281,8 @@ function LogonViewModel() {
     PREFERENCES['num_addresses_used'] = Math.min(MAX_ADDRESSES, PREFERENCES['num_addresses_used']);
 
     WALLET_OPTIONS_MODAL.selectedTheme(PREFERENCES['selected_theme']);
-    WALLET_OPTIONS_MODAL.addAutoBTCEscrowOptionIfAvailable();
-    WALLET_OPTIONS_MODAL.selectedBTCPayMethod(PREFERENCES['btcpay_method']);
+    WALLET_OPTIONS_MODAL.addAutoLTCEscrowOptionIfAvailable();
+    WALLET_OPTIONS_MODAL.selectedLTCPayMethod(PREFERENCES['ltcpay_method']);
     
     self.displayLicenseIfNecessary(mustSavePreferencesToServer);
   }
@@ -331,7 +331,7 @@ function LogonViewModel() {
 
     }
 
-    WALLET.refreshBTCBalances(false, moreAddresses, function() {
+    WALLET.refreshLTCBalances(false, moreAddresses, function() {
       
       var generateAnotherAddress = false;
       var totalAddresses = WALLET.addresses().length;
@@ -360,23 +360,23 @@ function LogonViewModel() {
     });
   }
   
-  self.updateBalances = function(additionalBTCAddresses, onSuccess) {
+  self.updateBalances = function(additionalLTCAddresses, onSuccess) {
     //updates all balances for all addesses, creating the asset objects on the address if need be
-    WALLET.refreshBTCBalances(true, additionalBTCAddresses, function() {
-      //^ specify true here to start a recurring get BTC balances timer chain
-      WALLET.refreshCounterpartyBalances(WALLET.getAddressesList(), onSuccess);
+    WALLET.refreshLTCBalances(true, additionalLTCAddresses, function() {
+      //^ specify true here to start a recurring get LTC balances timer chain
+      WALLET.refreshPaytokensBalances(WALLET.getAddressesList(), onSuccess);
     });
   }
   
   self.openWalletPt3 = function(mustSavePreferencesToServer) {
     //add in the armory and watch only addresses
-    var additionalBTCAddresses = [], i = null;
+    var additionalLTCAddresses = [], i = null;
     for(i=0; i < PREFERENCES['armory_offline_addresses'].length; i++) {
       try {
         WALLET.addAddress('armory',
           PREFERENCES['armory_offline_addresses'][i]['address'],
           PREFERENCES['armory_offline_addresses'][i]['pubkey_hex']);
-        additionalBTCAddresses.push(PREFERENCES['armory_offline_addresses'][i]['address']);
+        additionalLTCAddresses.push(PREFERENCES['armory_offline_addresses'][i]['address']);
       } catch(e) {
         $.jqlog.error("Could not generate armory address: " + e);
       }
@@ -384,7 +384,7 @@ function LogonViewModel() {
     for(i=0; i < PREFERENCES['watch_only_addresses'].length; i++) {
       try {
         WALLET.addAddress('watch', PREFERENCES['watch_only_addresses'][i]);
-        additionalBTCAddresses.push(PREFERENCES['watch_only_addresses'][i]);
+        additionalLTCAddresses.push(PREFERENCES['watch_only_addresses'][i]);
       } catch(e) {
         $.jqlog.error("Could not generate watch only address: " + e);
       }
@@ -397,7 +397,7 @@ function LogonViewModel() {
     }
     
     //Update the wallet balances (isAtLogon = true)
-    self.updateBalances(additionalBTCAddresses, self.openWalletPt4);
+    self.updateBalances(additionalLTCAddresses, self.openWalletPt4);
   }
     
   self.openWalletPt4 = function() {
@@ -408,9 +408,9 @@ function LogonViewModel() {
     $('#main').show();
 
     PENDING_ACTION_FEED.restoreFromLocalStorage(function() {
-      //load the waiting btc feed after the pending action feed is all done loading, as we look at the pending action
-      // feed to determine whether a btcpay process is in progress (pending) or not
-      WAITING_BTCPAY_FEED.restore();   
+      //load the waiting ltc feed after the pending action feed is all done loading, as we look at the pending action
+      // feed to determine whether a ltcpay process is in progress (pending) or not
+      WAITING_LTCPAY_FEED.restore();   
     });
     MESSAGE_FEED.restoreOrder();
     MESSAGE_FEED.resolvePendingRpsMatches();

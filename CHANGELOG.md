@@ -20,7 +20,7 @@ Full list of changes are at: http://goo.gl/AICdol
 * Added page-level help for balances and exchanges (with more coming in the future, as necessary)
 
 **Fixes:**
-* Significant performance and reliability improvements (on the counterblockd side)
+* Significant performance and reliability improvements (on the payblockd side)
 * Numerous minor fixes
 * Minor UI tweaks
 
@@ -29,7 +29,7 @@ Full list of changes are at: http://goo.gl/AICdol
 * Added Rock-Paper-Scissors
 * Added Zeroconf support (show pending balances for assets)
 * Added IP-based blocking for betting, RPS and dividend issuance. We are currently blocking people
-  with US-based IP addresses from using these features on counterwallet.co itself.
+  with US-based IP addresses from using these features on paywallet.co itself.
 
 **Fixes:**
 * Fixed issue with asset name validation (length checking was incorrect)
@@ -39,7 +39,7 @@ Full list of changes are at: http://goo.gl/AICdol
 
 ### v1.2.2 (~2014-06-25) ###
 **Enhancements:**
-* Check double connection to prevent double btcpay
+* Check double connection to prevent double ltcpay
 * Cancel bet buttons
 
 ### v1.2.1 ###
@@ -98,39 +98,39 @@ Full list of changes are at: http://goo.gl/AICdol
 
 ### v0.9.5 ###
 **Enhancements:**
-* implemented asset description json and asset pictures, yay (see https://wiki.counterparty.co/w/Enhanced_Asset_Info_in_Counterwallet)
+* implemented asset description json and asset pictures, yay (see https://wiki.paytokens.co/w/Enhanced_Asset_Info_in_Paywallet)
 * added 7 sample moving average to price charts
 * show # characters remaining when typing asset description
-* we now wait 6 blocks on an order match before doing a BTCpay (we do this for protection against a reorg making an order match disappear)
+* we now wait 6 blocks on an order match before doing a LTCpay (we do this for protection against a reorg making an order match disappear)
     
 **Fixes:**
-* open trades show properly in non-BTC pairs (thanks rotalumis for pointing this out)
+* open trades show properly in non-LTC pairs (thanks rotalumis for pointing this out)
 * debugging info now shows block number and last message ID properly, as well as backend API URL list
 * go off of tx_hash instead of tx_index where it matters, as tx_index can change between updates
 * fixed bug in order fee_required/fee_provided dispay (was showing the full amount instead of the remaining amount)
 * when overriding the market rate, clear the text box when switching between "as unit price" and "as quantity" (thanks rotalumis)
 * refactored feed_ objects in several areas
-* on testnet burn dialog, if BTC balance is less than possible burn amount, show that as max amount possible to burn instead (thanks to phantom for finding)
+* on testnet burn dialog, if LTC balance is less than possible burn amount, show that as max amount possible to burn instead (thanks to phantom for finding)
 * price charts group action on an hourly basis, instead of on a per block basis (which made the concept of using ohlc candlesticks not very useful in many cases)
 * Added verbage in when making a trade with an overridden unit price that tells you how much it will cost in total (this was missing)
 * TopAssets/Portfolio: 24h volume and 7d market volume was off.... it is now calucated on regular basis (at least once a day) for all assets with trading data
 * use anonymous knockout validation rules where possible
-* empty XCP balance should show as '0' instead of '??'
+* empty XPT balance should show as '0' instead of '??'
 * if a user is banned from chat, they shouldn't be able to /msg others
-* tweaks and fixes to work with newest counterpartyd changes (e.g. working with new 'open' order status)
+* tweaks and fixes to work with newest paytokensd changes (e.g. working with new 'open' order status)
 * we now filter out negative fee_required_remaining and fee_provided_remaining value items
     
 ### v0.9.4 ###
 **Enhancements:**
-* when wanting to do a trade where BTC we will purchased (i.e. a btcpay is required), show the online status of counterwallet users (as available) with trades appearing that offer to sell BTC. this is important because BTCpays must complete in a certain (shortish) period of time, and trading with a user that is marked online has a higher percentage chance of fully going through. online status is tracked by the server in an anonymous fashion (i.e. using the walletID identifier). Note that this change does not work with old trade (it will only work with trades that are made *after* this update is put into place)
-* added /online command to chat, which will tell you if the user you specify is online or not (e.g. type "/online cityglut" to see if cityglut currently has counterwallet running).
+* when wanting to do a trade where LTC we will purchased (i.e. a ltcpay is required), show the online status of paywallet users (as available) with trades appearing that offer to sell LTC. this is important because LTCpays must complete in a certain (shortish) period of time, and trading with a user that is marked online has a higher percentage chance of fully going through. online status is tracked by the server in an anonymous fashion (i.e. using the walletID identifier). Note that this change does not work with old trade (it will only work with trades that are made *after* this update is put into place)
+* added /online command to chat, which will tell you if the user you specify is online or not (e.g. type "/online cityglut" to see if cityglut currently has paywallet running).
 * added /msg command to chat for private messaging between handles...e.g. /msg halfcab yo wazzup
 
 **Fixes:**
 * chat div is properly scrolled to the bottom when displaying
 * market cap point calculation tweaked to not get multiple calculations per block, and to calculate market cap off the last trade for a given asset in a given block
-* fixed an issue with manual BTCpays not working (due to a reference to an invalid variable name)
-* options dialog did not properly display Auto BTC Pay and Auto Prime settings
+* fixed an issue with manual LTCpays not working (due to a reference to an invalid variable name)
+* options dialog did not properly display Auto LTC Pay and Auto Prime settings
 * MessageFeed logic encapsulated and better structured
 * fixed a bug with open order amounts showing incorrectly (thanks rotalumis)
 * orders (view prices) page had a few bugs that were fixed
@@ -142,17 +142,17 @@ Full list of changes are at: http://goo.gl/AICdol
 
 **Fixes:**
 * fixed market cap 7d graph on the leaderboard table and portfolio table
-* attempted fix for open orders properly updating, especially with orders where BTC is involved
+* attempted fix for open orders properly updating, especially with orders where LTC is involved
 * fixed: if balance was exceeded on buysell tab 2 when entering a overridden unit price, you could move on to the 3rd tab. added a validator to prevent this
 * fixed: if on tab 2 on the buysell page, and open orders are in the open orders table, and you go back to tab 1, and select a different buy asset, an assertion error would be thrown.
 * login page should be scrollable now, and additional css tweaks to make it display better on mobile devices and tablets
-* hopefully fixed a bug where if counterparty/coutnerwalletd were in the process of processng a block at the same time a client made a request, it would log the client out (saying that the server is not caught up to the blockchain)...this check is more tolerant now
+* hopefully fixed a bug where if paytokens/coutnerwalletd were in the process of processng a block at the same time a client made a request, it would log the client out (saying that the server is not caught up to the blockchain)...this check is more tolerant now
 
 ### v0.9.2 ###
 **Enhancements:**
-* added the ASSET LEADERBOARD functionality, which shows the top 100 counterparty assets (that have actual trade data)* asset market info is now pre-compiled (i.e. calculated and stored) every 10 minutes, due to the addition of the asset leaderboard* added notification pane messages for bets and broadcasts
+* added the ASSET LEADERBOARD functionality, which shows the top 100 paytokens assets (that have actual trade data)* asset market info is now pre-compiled (i.e. calculated and stored) every 10 minutes, due to the addition of the asset leaderboard* added notification pane messages for bets and broadcasts
 * servers store chat history now in database, and added get_chat_history() call. 
-* because of the above, chat history persists between server restarts (so you still get the newest line even if the counterwalletd service needs to be restarted)
+* because of the above, chat history persists between server restarts (so you still get the newest line even if the paywalletd service needs to be restarted)
 * fixed up and enhanced the Asset Portfolio page
 
 **Fixes:**
@@ -160,10 +160,10 @@ Full list of changes are at: http://goo.gl/AICdol
 * buy/sell: order book display changed to percentages based adaptive display instead of absolute fee based (i.e. works as it should now :) 
 * chat handle completion on tab is now case insensitive
 * choosing your handle when starting a chat for the first time now will tell you if the handle is in use or not
-* fixes for nginx "crash" situation, fix correctly closing unused sockets in counterwalletd in one or two places
+* fixes for nginx "crash" situation, fix correctly closing unused sockets in paywalletd in one or two places
 * address sweeping was borked. fixed.
 * chat was totally clearing history after 200 lines when it should have just been removing the first 5 lines
-* 0.9.2.1: bug fix for counterwalletd not properly rebuilding its app_config collection if the cwd DB version went up
+* 0.9.2.1: bug fix for paywalletd not properly rebuilding its app_config collection if the cwd DB version went up
 
 ### v0.9.1 ###
 **Enhancements:**
@@ -183,4 +183,4 @@ Full list of changes are at: http://goo.gl/AICdol
 * buy/sell: fixed text "flashing" issue when loading 2nd step
 * buy/sell: fixed issue with duplicate open orders displaying
 * fix for when transferring a locked asset, the locked setting not being correctly maintained (it would show up in the new address as a non-locked asset)
-* fixed issue with BTC sends between two addresses in the same wallet not removing pending (cloud) icon from the destination address once confirmed
+* fixed issue with LTC sends between two addresses in the same wallet not removing pending (cloud) icon from the destination address once confirmed

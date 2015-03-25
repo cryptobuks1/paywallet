@@ -6,8 +6,8 @@ var AssetLeaderboardViewModel = CClass.create(function() {
   self.marketCapHistory = null; //only used for leaderboard
   self.showPortfolioIn = ko.observable('');
   self.marketCapTables = ko.observableArray([
-    {'base': 'XCP', 'data': ko.observableArray([])},
-    {'base': 'BTC', 'data': ko.observableArray([])}
+    {'base': 'XPT', 'data': ko.observableArray([])},
+    {'base': 'LTC', 'data': ko.observableArray([])}
   ]);
   self._lastWindowWidth = null;
   
@@ -17,7 +17,7 @@ var AssetLeaderboardViewModel = CClass.create(function() {
     failoverAPI(self.isLeaderboard ? "get_market_info_leaderboard" : "get_market_info", self.isLeaderboard ? {} : {assets: assets}, function(data, endpoint) {
       self.marketInfo = data;
       self.updateMarketInfo();
-      self.showPortfolioIn("XCP"); //causes the table to be generated off of self.marketInfo
+      self.showPortfolioIn("XPT"); //causes the table to be generated off of self.marketInfo
     });
     
     if(self.isLeaderboard) {
@@ -32,79 +32,79 @@ var AssetLeaderboardViewModel = CClass.create(function() {
     //Compose the table this has changed
     var i = null, j = null, marketInfo = null;
     
-    //label XCP marketcap positions
-    marketInfo = self.isLeaderboard ? self.marketInfo['xcp'] : self.marketInfo; 
+    //label XPT marketcap positions
+    marketInfo = self.isLeaderboard ? self.marketInfo['xpt'] : self.marketInfo; 
     marketInfo.sort(
       function(l, r) {
-        return l['market_cap_in_xcp'] == r['market_cap_in_xcp'] ? 0 : (l['market_cap_in_xcp'] < r['market_cap_in_xcp'] ? 1 : -1)
+        return l['market_cap_in_xpt'] == r['market_cap_in_xpt'] ? 0 : (l['market_cap_in_xpt'] < r['market_cap_in_xpt'] ? 1 : -1)
       }
     );
     for(i=0; i < marketInfo.length; i++) {
-      marketInfo[i]['position_xcp'] = i + 1;
+      marketInfo[i]['position_xpt'] = i + 1;
     }
-    assert(self.marketCapTables()[0]['base'] == 'XCP');
+    assert(self.marketCapTables()[0]['base'] == 'XPT');
     for(i=0; i < marketInfo.length; i++) {
-      if(!marketInfo[i]['price_in_xcp']) continue;
+      if(!marketInfo[i]['price_in_xpt']) continue;
       self.marketCapTables()[0]['data'].push({
-        position: marketInfo[i]['position_xcp'],
+        position: marketInfo[i]['position_xpt'],
         asset: marketInfo[i]['asset'],
         dispAsset: AssetLeaderboardViewModel.formulateExtendedAssetInfo(marketInfo[i]['asset'],
           marketInfo[i]['extended_image'], marketInfo[i]['extended_website']),
-        marketCap: marketInfo[i]['market_cap_in_xcp'] ? (smartFormat(marketInfo[i]['market_cap_in_xcp'], 100, 0) + ' XCP') : '',
-        price: marketInfo[i]['aggregated_price_as_xcp'] ? (smartFormat(marketInfo[i]['aggregated_price_as_xcp'], 10, 4) + ' XCP') : '',
+        marketCap: marketInfo[i]['market_cap_in_xpt'] ? (smartFormat(marketInfo[i]['market_cap_in_xpt'], 100, 0) + ' XPT') : '',
+        price: marketInfo[i]['aggregated_price_as_xpt'] ? (smartFormat(marketInfo[i]['aggregated_price_as_xpt'], 10, 4) + ' XPT') : '',
         supply: smartFormat(marketInfo[i]['total_supply'], 100, 4) + ' ' + marketInfo[i]['asset'],
         //volume: marketInfo[i]['24h_summary']['vol'] ? (smartFormat(marketInfo[i]['24h_summary']['vol'], 100, 4) + ' ' + marketInfo[i]['asset']) : '',
-        //volume: (marketInfo[i]['24h_ohlc_in_xcp']['vol'] && marketInfo[i]['aggregated_price_in_xcp']) 
-        //  ? (smartFormat(marketInfo[i]['24h_ohlc_in_xcp']['vol'] * marketInfo[i]['aggregated_price_in_xcp'], 0, 4) + ' XCP') : '',
-        volume: (marketInfo[i]['24h_summary'] && marketInfo[i]['24h_summary']['vol'] && marketInfo[i]['aggregated_price_in_xcp']) 
-          ? (smartFormat(marketInfo[i]['24h_summary']['vol'] * marketInfo[i]['aggregated_price_in_xcp'], 10, 4) + ' XCP') : '',
-        pctChange: marketInfo[i]['24h_vol_price_change_in_xcp'] ? (smartFormat(marketInfo[i]['24h_vol_price_change_in_xcp'], 0, 2) + ' %') : '',
-        pctChangeColorClass: marketInfo[i]['24h_vol_price_change_in_xcp'] > 0 ? 'txt-color-green' : (marketInfo[i]['24h_vol_price_change_in_xcp'] < 0 ? 'txt-color-red' : 'initial'),
-        history: marketInfo[i]['7d_history_in_xcp'],
+        //volume: (marketInfo[i]['24h_ohlc_in_xpt']['vol'] && marketInfo[i]['aggregated_price_in_xpt']) 
+        //  ? (smartFormat(marketInfo[i]['24h_ohlc_in_xpt']['vol'] * marketInfo[i]['aggregated_price_in_xpt'], 0, 4) + ' XPT') : '',
+        volume: (marketInfo[i]['24h_summary'] && marketInfo[i]['24h_summary']['vol'] && marketInfo[i]['aggregated_price_in_xpt']) 
+          ? (smartFormat(marketInfo[i]['24h_summary']['vol'] * marketInfo[i]['aggregated_price_in_xpt'], 10, 4) + ' XPT') : '',
+        pctChange: marketInfo[i]['24h_vol_price_change_in_xpt'] ? (smartFormat(marketInfo[i]['24h_vol_price_change_in_xpt'], 0, 2) + ' %') : '',
+        pctChangeColorClass: marketInfo[i]['24h_vol_price_change_in_xpt'] > 0 ? 'txt-color-green' : (marketInfo[i]['24h_vol_price_change_in_xpt'] < 0 ? 'txt-color-red' : 'initial'),
+        history: marketInfo[i]['7d_history_in_xpt'],
 
-        marketCapRaw: marketInfo[i]['market_cap_in_xcp'],
-        priceRaw: marketInfo[i]['aggregated_price_as_xcp'],
+        marketCapRaw: marketInfo[i]['market_cap_in_xpt'],
+        priceRaw: marketInfo[i]['aggregated_price_as_xpt'],
         supplyRaw: marketInfo[i]['total_supply'],
-        volumeRaw: marketInfo[i]['24h_ohlc_in_xcp'] ? marketInfo[i]['24h_ohlc_in_xcp']['vol'] : 0,
-        pctChangeRaw: marketInfo[i]['24h_vol_price_change_in_xcp']
+        volumeRaw: marketInfo[i]['24h_ohlc_in_xpt'] ? marketInfo[i]['24h_ohlc_in_xpt']['vol'] : 0,
+        pctChangeRaw: marketInfo[i]['24h_vol_price_change_in_xpt']
       });
     }
     
-    //label BTC marketcap positions
-    marketInfo = self.isLeaderboard ? self.marketInfo['btc'] : self.marketInfo; 
+    //label LTC marketcap positions
+    marketInfo = self.isLeaderboard ? self.marketInfo['ltc'] : self.marketInfo; 
     marketInfo.sort(
       function(l, r) {
-        return l['market_cap_in_btc'] == r['market_cap_in_btc'] ? 0 : (l['market_cap_in_btc'] < r['market_cap_in_btc'] ? 1 : -1)
+        return l['market_cap_in_ltc'] == r['market_cap_in_ltc'] ? 0 : (l['market_cap_in_ltc'] < r['market_cap_in_ltc'] ? 1 : -1)
       }
     );
     for(i=0; i < marketInfo.length; i++) {
-      marketInfo[i]['position_btc'] = i + 1;
+      marketInfo[i]['position_ltc'] = i + 1;
     }
-    assert(self.marketCapTables()[1]['base'] == 'BTC');
+    assert(self.marketCapTables()[1]['base'] == 'LTC');
     for(i=0; i < marketInfo.length; i++) {
-      if(!marketInfo[i]['price_in_btc']) continue;
+      if(!marketInfo[i]['price_in_ltc']) continue;
       self.marketCapTables()[1]['data'].push({
-        position: marketInfo[i]['position_btc'],
+        position: marketInfo[i]['position_ltc'],
         asset: marketInfo[i]['asset'],
         dispAsset: AssetLeaderboardViewModel.formulateExtendedAssetInfo(marketInfo[i]['asset'],
           marketInfo[i]['extended_image'], marketInfo[i]['extended_website']),
-        marketCap: marketInfo[i]['market_cap_in_btc'] ? (smartFormat(marketInfo[i]['market_cap_in_btc'], 100, 0) + ' BTC') : '',
-        price: marketInfo[i]['aggregated_price_as_btc'] ? (smartFormat(marketInfo[i]['aggregated_price_as_btc'], 10, 4) + ' BTC') : '',
+        marketCap: marketInfo[i]['market_cap_in_ltc'] ? (smartFormat(marketInfo[i]['market_cap_in_ltc'], 100, 0) + ' LTC') : '',
+        price: marketInfo[i]['aggregated_price_as_ltc'] ? (smartFormat(marketInfo[i]['aggregated_price_as_ltc'], 10, 4) + ' LTC') : '',
         supply: smartFormat(marketInfo[i]['total_supply'], 100, 4) + ' ' + marketInfo[i]['asset'],
         //volume: marketInfo[i]['24h_summary']['vol'] ? (smartFormat(marketInfo[i]['24h_summary']['vol'], 100, 4) + ' ' + marketInfo[i]['asset']) : '',
-        //volume: (marketInfo[i]['24h_ohlc_in_btc']['vol'] && marketInfo[i]['aggregated_price_in_btc']) 
-        //  ? (smartFormat(marketInfo[i]['24h_ohlc_in_btc']['vol'] * marketInfo[i]['aggregated_price_in_btc'], 0, 4) + ' BTC') : '',
-        volume: (marketInfo[i]['24h_summary'] && marketInfo[i]['24h_summary']['vol'] && marketInfo[i]['aggregated_price_in_btc']) 
-          ? (smartFormat(marketInfo[i]['24h_summary']['vol'] * marketInfo[i]['aggregated_price_in_btc'], 10, 4) + ' BTC') : '',
-        pctChange: marketInfo[i]['24h_vol_price_change_in_btc'] ? (smartFormat(marketInfo[i]['24h_vol_price_change_in_btc'], 0, 2) + ' %') : '',
-        pctChangeColorClass: marketInfo[i]['24h_vol_price_change_in_btc'] > 0 ? 'txt-color-green' : (marketInfo[i]['24h_vol_price_change_in_btc'] < 0 ? 'txt-color-red' : 'initial'),
-        history: marketInfo[i]['7d_history_in_btc'],
+        //volume: (marketInfo[i]['24h_ohlc_in_ltc']['vol'] && marketInfo[i]['aggregated_price_in_ltc']) 
+        //  ? (smartFormat(marketInfo[i]['24h_ohlc_in_ltc']['vol'] * marketInfo[i]['aggregated_price_in_ltc'], 0, 4) + ' LTC') : '',
+        volume: (marketInfo[i]['24h_summary'] && marketInfo[i]['24h_summary']['vol'] && marketInfo[i]['aggregated_price_in_ltc']) 
+          ? (smartFormat(marketInfo[i]['24h_summary']['vol'] * marketInfo[i]['aggregated_price_in_ltc'], 10, 4) + ' LTC') : '',
+        pctChange: marketInfo[i]['24h_vol_price_change_in_ltc'] ? (smartFormat(marketInfo[i]['24h_vol_price_change_in_ltc'], 0, 2) + ' %') : '',
+        pctChangeColorClass: marketInfo[i]['24h_vol_price_change_in_ltc'] > 0 ? 'txt-color-green' : (marketInfo[i]['24h_vol_price_change_in_ltc'] < 0 ? 'txt-color-red' : 'initial'),
+        history: marketInfo[i]['7d_history_in_ltc'],
 
-        marketCapRaw: marketInfo[i]['market_cap_in_btc'],
-        priceRaw: marketInfo[i]['aggregated_price_as_btc'],
+        marketCapRaw: marketInfo[i]['market_cap_in_ltc'],
+        priceRaw: marketInfo[i]['aggregated_price_as_ltc'],
         supplyRaw: marketInfo[i]['total_supply'],
-        volumeRaw: marketInfo[i]['24h_ohlc_in_btc'] ? marketInfo[i]['24h_ohlc_in_btc']['vol'] : 0,
-        pctChangeRaw: marketInfo[i]['24h_vol_price_change_in_btc']
+        volumeRaw: marketInfo[i]['24h_ohlc_in_ltc'] ? marketInfo[i]['24h_ohlc_in_ltc']['vol'] : 0,
+        pctChangeRaw: marketInfo[i]['24h_vol_price_change_in_ltc']
       });
     }
     
@@ -130,17 +130,17 @@ var AssetLeaderboardViewModel = CClass.create(function() {
     self.generateAssetMiniCharts();
   }
   
-  self.showPortfolioInXCP = function() {
-    self.showPortfolioIn("XCP");
+  self.showPortfolioInXPT = function() {
+    self.showPortfolioIn("XPT");
   }
   
-  self.showPortfolioInBTC = function() {
-    self.showPortfolioIn("BTC");
+  self.showPortfolioInLTC = function() {
+    self.showPortfolioIn("LTC");
   }
   
   self.showPortfolioIn.subscribeChanged(function(newValue, prevValue) {
     if(!prevValue) return; //initial setting on initialization, ignore
-    assert(newValue == "XCP" || newValue == "BTC", "Invalid value");
+    assert(newValue == "XPT" || newValue == "LTC", "Invalid value");
     if(newValue == prevValue) return; //no change
     if(self.isLeaderboard) {
       self.generateMarketCapHistoryGraph(); //regenerate for switch to different data
@@ -218,9 +218,9 @@ var AssetLeaderboardViewModel = CClass.create(function() {
 AssetLeaderboardViewModel.formulateExtendedAssetInfo = function(asset, hasImage, website) {
   //determine asset image
   var dispAsset = asset;
-  if(asset == 'XCP' || asset == 'BTC') {
+  if(asset == 'XPT' || asset == 'LTC') {
     dispAsset = '<img src="assets/' + asset + '.png" />&nbsp;';
-    var website = asset == 'XCP' ? "http://www.counterparty.co" : "http://www.bitcoin.org";
+    var website = asset == 'XPT' ? "http://www.paytokens.co" : "http://www.litecoin.org";
     dispAsset += '<a href="' + website + '" target="_blank">' + asset + '</a>';
   } else if(hasImage) {
     dispAsset = '<img src="' + (USE_TESTNET ? '/_t_asset_img/' : '/_asset_img/') + asset + '.png" />&nbsp;';

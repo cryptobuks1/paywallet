@@ -76,18 +76,18 @@ PendingActionViewModel.calcText = function(category, data) {
     desc = i18n.t("pend_or_unconf_cancellation", pending, data['_type'], data['_tx_index']);
   } else if(category == 'callbacks') {
     desc = i18n.t("pend_or_unconf_callback", pending, (data['fraction'] * 100).toFixed(4), data['asset']);
-  } else if(category == 'btcpays') {
-    desc = i18n.t("pend_or_unconf_btcpay", pending, getAddressLabel(data['source']));
+  } else if(category == 'ltcpays') {
+    desc = i18n.t("pend_or_unconf_ltcpay", pending, getAddressLabel(data['source']));
   } else if(category == 'rps') {
     desc  = i18n.t("pend_or_unconf_rps", pending, getAddressLabel(data['source']), numberWithCommas(normalizeQuantity(data['wager'])));
   } else if(category == 'rpsresolves') {
     desc  = i18n.t("pend_or_unconf_rpsresolve", pending, getAddressLabel(data['source']));
   } else if(category == 'order_matches') {
 
-    if (WALLET.getAddressObj(data['tx1_address']) && data['forward_asset'] == 'BTC' && data['_status'] == 'pending') {      
-      desc = i18n.t("pend_or_unconf_wait_btcpay", numberWithCommas(normalizeQuantity(data['forward_quantity'])), getAddressLabel(data['tx0_address']));
-    } else if (WALLET.getAddressObj(data['tx0_address']) && data['backward_asset'] == 'BTC' && data['_status'] == 'pending') {
-      desc = i18n.t("pend_or_unconf_wait_btcpay", numberWithCommas(normalizeQuantity(data['backward_quantity'])), getAddressLabel(data['tx1_address']));
+    if (WALLET.getAddressObj(data['tx1_address']) && data['forward_asset'] == 'LTC' && data['_status'] == 'pending') {      
+      desc = i18n.t("pend_or_unconf_wait_ltcpay", numberWithCommas(normalizeQuantity(data['forward_quantity'])), getAddressLabel(data['tx0_address']));
+    } else if (WALLET.getAddressObj(data['tx0_address']) && data['backward_asset'] == 'LTC' && data['_status'] == 'pending') {
+      desc = i18n.t("pend_or_unconf_wait_ltcpay", numberWithCommas(normalizeQuantity(data['backward_quantity'])), getAddressLabel(data['tx1_address']));
     }
 
   } else {
@@ -103,10 +103,10 @@ PendingActionViewModel.calcText = function(category, data) {
 
 function PendingActionFeedViewModel() {
   var self = this;
-  self.entries = ko.observableArray([]); //pending actions beyond pending BTCpays
+  self.entries = ko.observableArray([]); //pending actions beyond pending LTCpays
   self.lastUpdated = ko.observable(new Date());
   self.ALLOWED_CATEGORIES = [
-    'sends', 'orders', 'issuances', 'broadcasts', 'bets', 'dividends', 'burns', 'cancels', 'callbacks', 'btcpays', 'rps', 'rpsresolves', 'order_matches'
+    'sends', 'orders', 'issuances', 'broadcasts', 'bets', 'dividends', 'burns', 'cancels', 'callbacks', 'ltcpays', 'rps', 'rpsresolves', 'order_matches'
     //^ pending actions are only allowed for these categories
   ];
   
@@ -114,10 +114,10 @@ function PendingActionFeedViewModel() {
     return self.entries().length;
   }, self);
 
-  self.pendingSellBTCOrdersCount = ko.computed(function() {
+  self.pendingSellLTCOrdersCount = ko.computed(function() {
     return $.map(self.entries(), function(item) { 
-        var sellingBTC = ('orders' == item.CATEGORY && 'BTC' == item.DATA.give_asset) || ('btcpays' == item.CATEGORY);
-        return sellingBTC ? item : null;
+        var sellingLTC = ('orders' == item.CATEGORY && 'LTC' == item.DATA.give_asset) || ('ltcpays' == item.CATEGORY);
+        return sellingLTC ? item : null;
     }).length;
   }, self);
 
@@ -153,11 +153,11 @@ function PendingActionFeedViewModel() {
     
     self.lastUpdated(new Date());
     PendingActionFeedViewModel.modifyBalancePendingFlag(category, data, true);
-    WALLET.refreshBTCBalances();
+    WALLET.refreshLTCBalances();
   }
 
-  self.remove = function(txHash, category, btcRefreshSpecialLogic) {
-    if(typeof(btcRefreshSpecialLogic)==='undefined') btcRefreshSpecialLogic = false;
+  self.remove = function(txHash, category, ltcRefreshSpecialLogic) {
+    if(typeof(ltcRefreshSpecialLogic)==='undefined') ltcRefreshSpecialLogic = false;
     if(!txHash) return; //if the event doesn't have an txHash, we can't do much about that. :)
     if(self.ALLOWED_CATEGORIES.indexOf(category)==-1) return; //ignore this category as we don't handle it
     var match = ko.utils.arrayFirst(self.entries(), function(item) {
@@ -165,13 +165,13 @@ function PendingActionFeedViewModel() {
       //item.CATEGORY == category
     });
     if(match) {
-      //if the magically hackish btcRefreshSpecialLogic flag is specified, then do a few custom checks
-      // that prevent us from removing events whose txns we see as recent txns, but are actually NOT btc
-      // send txns (e.g. is a counterparty asset send, or asset issuance, or something the BTC balance refresh
-      // routine should NOT be deleting. This hack is a consequence of managing BTC balances synchronously like we do)
-      if(btcRefreshSpecialLogic) {
+      //if the magically hackish ltcRefreshSpecialLogic flag is specified, then do a few custom checks
+      // that prevent us from removing events whose txns we see as recent txns, but are actually NOT ltc
+      // send txns (e.g. is a paytokens asset send, or asset issuance, or something the LTC balance refresh
+      // routine should NOT be deleting. This hack is a consequence of managing LTC balances synchronously like we do)
+      if(ltcRefreshSpecialLogic) {
         assert(category == "sends");
-        if (match['CATEGORY'] != category || match['DATA']['asset'] != 'BTC')
+        if (match['CATEGORY'] != category || match['DATA']['asset'] != 'LTC')
           return;
           
         //Also, with this logic, since we found the entry as a pending action, add a completed send action
@@ -281,8 +281,8 @@ PendingActionFeedViewModel.modifyBalancePendingFlag = function(category, data, f
   if(category == 'burns') {
 
     addressObj = WALLET.getAddressObj(data['source']);
-    addressObj.getAssetObj("XCP").balanceChangePending(flagSetting);
-    updateUnconfirmedBalance(data['source'], "BTC", data['quantity'] * -1);
+    addressObj.getAssetObj("XPT").balanceChangePending(flagSetting);
+    updateUnconfirmedBalance(data['source'], "LTC", data['quantity'] * -1);
     
 
   } else if(category == 'sends') {
@@ -290,10 +290,10 @@ PendingActionFeedViewModel.modifyBalancePendingFlag = function(category, data, f
     updateUnconfirmedBalance(data['source'], data['asset'], data['quantity'] * -1);
     updateUnconfirmedBalance(data['destination'], data['asset'], data['quantity']);
 
-  } else if(category == 'btcpays') {
+  } else if(category == 'ltcpays') {
 
-    updateUnconfirmedBalance(data['source'], "BTC", data['quantity'] * -1);
-    updateUnconfirmedBalance(data['destination'], "BTC", data['quantity']);
+    updateUnconfirmedBalance(data['source'], "LTC", data['quantity'] * -1);
+    updateUnconfirmedBalance(data['destination'], "LTC", data['quantity']);
 
   } else if(category == 'issuances' && !data['locked'] && !data['transfer_destination']) {
     //with this, we don't modify the balanceChangePending flag, but the issuanceQtyChangePending flag instead...
@@ -305,7 +305,7 @@ PendingActionFeedViewModel.modifyBalancePendingFlag = function(category, data, f
     } else if (!assetObj) {
       //updateUnconfirmedBalance(data['source'], data['asset'], data['quantity'], null, data);
       // issuance fee
-      updateUnconfirmedBalance(data['source'], 'XCP', -ASSET_CREATION_FEE_XCP * UNIT);
+      updateUnconfirmedBalance(data['source'], 'XPT', -ASSET_CREATION_FEE_XPT * UNIT);
     }
 
   } else if (category == 'dividend') {
@@ -315,17 +315,17 @@ PendingActionFeedViewModel.modifyBalancePendingFlag = function(category, data, f
 
   } else if (category == 'orders') {
 
-    if (data['give_asset'] != 'BTC') {
+    if (data['give_asset'] != 'LTC') {
       updateUnconfirmedBalance(data['source'], data['give_asset'], data['give_quantity'] * -1);
     }   
 
   } else if (category == 'bets') {
 
-    updateUnconfirmedBalance(data['source'], 'XCP', data['wager_quantity'] * -1);
+    updateUnconfirmedBalance(data['source'], 'XPT', data['wager_quantity'] * -1);
     
   } else if (category == 'rps') {
 
-    updateUnconfirmedBalance(data['source'], 'XCP', data['wager'] * -1);
+    updateUnconfirmedBalance(data['source'], 'XPT', data['wager'] * -1);
     
   }
 }

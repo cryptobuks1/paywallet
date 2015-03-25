@@ -7,7 +7,7 @@ var BuySellAddressInDropdownItemModel = function(address, label, asset, balance)
 
 ko.validation.rules['ordersIsExistingAssetName'] = {
   validator: function (asset, self) {
-    if(asset == 'XCP' || asset == 'BTC') return true;
+    if(asset == 'XPT' || asset == 'LTC') return true;
     var match = ko.utils.arrayFirst(self.allAssets(), function(item) {
       return item == asset;
     });
@@ -75,7 +75,7 @@ function ExchangeViewModel() {
 
   self.selectedQuoteAsset = ko.observable();
   self.selectedQuoteAsset.subscribe(function(value) {
-    if (value == 'BTC' || value == 'XCP') self.asset2(value);
+    if (value == 'LTC' || value == 'XPT') self.asset2(value);
     else self.asset2('');
   })
 
@@ -156,18 +156,18 @@ function ExchangeViewModel() {
 
   /********************************************
 
-  BTCPAY AUTOESCROW 
+  LTCPAY AUTOESCROW 
   
   ********************************************/
 
 
-   //step 1: fetch an escrow address to send the BTC to
-  self.getBTCEscrowAddress = function(orderTxHash, orderParams, orderAction) {
+   //step 1: fetch an escrow address to send the LTC to
+  self.getLTCEscrowAddress = function(orderTxHash, orderParams, orderAction) {
 
     var key = WALLET.getAddressObj(orderParams['source']).KEY;
 
     var params = {
-      'method': 'autobtcescrow_get_escrow_address',
+      'method': 'autoltcescrow_get_escrow_address',
       'params': {
         'order_source': orderParams['source'], 
         'order_tx_hash': orderTxHash, 
@@ -178,32 +178,32 @@ function ExchangeViewModel() {
 
     var onSuccess = function(escrowInfo, endpoint) {
       assert(escrowInfo['escrow_address'], "Returned escrow address undefined/blank!");
-      self.sendBTCEscrow(orderTxHash, orderParams, orderAction, escrowInfo, 1);
+      self.sendLTCEscrow(orderTxHash, orderParams, orderAction, escrowInfo, 1);
     }
 
-    failoverAPI('proxy_to_autobtcescrow', params, onSuccess);
+    failoverAPI('proxy_to_autoltcescrow', params, onSuccess);
   }
 
 
-  //step 2: sends the BTC over to the escrow address
-  self.sendBTCEscrow = function(orderTxHash, orderParams, orderAction, escrowInfo, retry) {
+  //step 2: sends the LTC over to the escrow address
+  self.sendLTCEscrow = function(orderTxHash, orderParams, orderAction, escrowInfo, retry) {
 
     var sendParams = { 
       source: orderParams['source'],
       destination: escrowInfo['escrow_address'],
-      quantity: orderParams['give_quantity'] + BTCPAY_FEE_RETAINER + Math.ceil(orderParams['give_quantity'] * ESCROW_COMMISSION),
+      quantity: orderParams['give_quantity'] + LTCPAY_FEE_RETAINER + Math.ceil(orderParams['give_quantity'] * ESCROW_COMMISSION),
       asset: orderParams['give_asset'],
       _divisible: orderParams['_give_divisible']
     };
 
     var onSuccess = function(depositTxHash, data, endpoint, addressType, armoryUTx) {
-      $.jqlog.info("BTCEscrow record " + escrowInfo['_id'] + "created for order tx hash " + orderTxHash);
+      $.jqlog.info("LTCEscrow record " + escrowInfo['_id'] + "created for order tx hash " + orderTxHash);
       
-      var message = i18n.t("btc_escrow_success", i18n.t(orderAction), (orderAction === 'buy' ? self.buyAmount() : self.sellAmount()), 
+      var message = i18n.t("ltc_escrow_success", i18n.t(orderAction), (orderAction === 'buy' ? self.buyAmount() : self.sellAmount()), 
                             self.baseAsset(), normalizeQuantity(orderParams['give_quantity'])); 
 
       WALLET.showTransactionCompleteDialog(message + ' ' + i18n.t(ACTION_PENDING_NOTICE), message, armoryUTx);
-      WALLET.updateBTCEscrowedBalance();
+      WALLET.updateLTCEscrowedBalance();
     }
 
     var onError = function(jqXHR, textStatus, errorThrown) {
@@ -212,7 +212,7 @@ function ExchangeViewModel() {
         $.jqlog.debug("TRANSACTION FAILED => RETRY " + retry + "/" + TRANSACTION_MAX_RETRY);
 
         setTimeout(function() {      
-          self.sendBTCEscrow(orderTxHash, orderParams, orderAction, escrowInfo, retry + 1);
+          self.sendLTCEscrow(orderTxHash, orderParams, orderAction, escrowInfo, retry + 1);
         }, TRANSACTION_DELAY);
 
       } else {
@@ -223,14 +223,14 @@ function ExchangeViewModel() {
     WALLET.doTransaction(orderParams['source'], "create_send", sendParams, onSuccess, onError);
   }
 
-  // Launch 2 steps for auto BTC escrow
-  self.doOrderAutoBTCEscrow = function(orderTxHash, orderParams, orderAction) {
-    assert(orderParams['give_asset'] === 'BTC');
+  // Launch 2 steps for auto LTC escrow
+  self.doOrderAutoLTCEscrow = function(orderTxHash, orderParams, orderAction) {
+    assert(orderParams['give_asset'] === 'LTC');
     assert(orderAction === 'buy' || orderAction === 'sell');
-    if(PREFERENCES['btcpay_method'] !== 'autoescrow') return;
+    if(PREFERENCES['ltcpay_method'] !== 'autoescrow') return;
     
     setTimeout(function() {      
-      self.getBTCEscrowAddress(orderTxHash, orderParams, orderAction);
+      self.getLTCEscrowAddress(orderTxHash, orderParams, orderAction);
     }, TRANSACTION_DELAY);
   }
 
@@ -346,8 +346,8 @@ function ExchangeViewModel() {
     var give_quantity = denormalizeQuantity(self.sellAmount(), self.baseAssetIsDivisible());
     var fee_provided = MIN_FEE;
     
-    if (self.baseAsset() == 'BTC') {
-      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultBTCFeeProvidedPct()/100);
+    if (self.baseAsset() == 'LTC') {
+      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultLTCFeeProvidedPct()/100);
       fee_provided = Math.ceil(fee_provided);
     }
 
@@ -403,15 +403,15 @@ function ExchangeViewModel() {
     var fee_provided = MIN_FEE;
     var expiration = parseInt(WALLET_OPTIONS_MODAL.orderDefaultExpiration());
 
-    if (self.quoteAsset() == 'BTC') {
-      fee_required = mulFloat(get_quantity, WALLET_OPTIONS_MODAL.defaultBTCFeeRequiredPct()/100);
+    if (self.quoteAsset() == 'LTC') {
+      fee_required = mulFloat(get_quantity, WALLET_OPTIONS_MODAL.defaultLTCFeeRequiredPct()/100);
       fee_required = Math.ceil(fee_required);
     }
 
-    if (self.baseAsset() == 'BTC') {
-      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultBTCFeeProvidedPct()/100);
+    if (self.baseAsset() == 'LTC') {
+      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultLTCFeeProvidedPct()/100);
       fee_provided = Math.ceil(fee_provided);
-      expiration = parseInt(WALLET_OPTIONS_MODAL.orderBTCSellDefaultExpiration());
+      expiration = parseInt(WALLET_OPTIONS_MODAL.orderLTCSellDefaultExpiration());
     }
 
     var params = {
@@ -439,10 +439,10 @@ function ExchangeViewModel() {
 
       WALLET.showTransactionCompleteDialog(message + " " + i18n.t(ACTION_PENDING_NOTICE), message, armoryUTx);
        
-      //if the order involes selling BTC, then we want to notify the servers of our wallet_id so folks can see if our
-      // wallet is "online", in order to determine if we'd be able to best make the necessary BTCpay
-      if(self.baseAsset() == 'BTC' && addressType !== 'armory') {
-        multiAPI("record_btc_open_order", {'wallet_id': WALLET.identifier(), 'order_tx_hash': txHash});
+      //if the order involes selling LTC, then we want to notify the servers of our wallet_id so folks can see if our
+      // wallet is "online", in order to determine if we'd be able to best make the necessary LTCpay
+      if(self.baseAsset() == 'LTC' && addressType !== 'armory') {
+        multiAPI("record_ltc_open_order", {'wallet_id': WALLET.identifier(), 'order_tx_hash': txHash});
       }
     }
 
@@ -621,8 +621,8 @@ function ExchangeViewModel() {
     var give_quantity = denormalizeQuantity(self.buyTotal(), self.quoteAssetIsDivisible());
     var fee_provided = MIN_FEE;
 
-    if (self.quoteAsset() == 'BTC') {
-      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultBTCFeeProvidedPct()/100);
+    if (self.quoteAsset() == 'LTC') {
+      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultLTCFeeProvidedPct()/100);
       fee_provided = Math.ceil(fee_provided);
     }
 
@@ -682,15 +682,15 @@ function ExchangeViewModel() {
     var fee_provided = MIN_FEE;
     var expiration = parseInt(WALLET_OPTIONS_MODAL.orderDefaultExpiration());
 
-    if (self.baseAsset() == 'BTC') {
-      fee_required = mulFloat(get_quantity, WALLET_OPTIONS_MODAL.defaultBTCFeeRequiredPct()/100);
+    if (self.baseAsset() == 'LTC') {
+      fee_required = mulFloat(get_quantity, WALLET_OPTIONS_MODAL.defaultLTCFeeRequiredPct()/100);
       fee_required = Math.ceil(fee_required);
     }
 
-    if (self.quoteAsset() == 'BTC') {
-      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultBTCFeeProvidedPct()/100);
+    if (self.quoteAsset() == 'LTC') {
+      fee_provided = mulFloat(give_quantity, WALLET_OPTIONS_MODAL.defaultLTCFeeProvidedPct()/100);
       fee_provided = Math.ceil(fee_provided);
-      expiration = parseInt(WALLET_OPTIONS_MODAL.orderBTCSellDefaultExpiration());
+      expiration = parseInt(WALLET_OPTIONS_MODAL.orderLTCSellDefaultExpiration());
     }
 
     var params = {
@@ -709,9 +709,9 @@ function ExchangeViewModel() {
     var onSuccess = function(txHash, data, endpoint, addressType, armoryUTx) {
       trackEvent('Exchange', 'Buy', self.dispAssetPair());
 
-      if(PREFERENCES['btcpay_method'] === 'autoescrow' && params['give_asset'] === 'BTC') {
+      if(PREFERENCES['ltcpay_method'] === 'autoescrow' && params['give_asset'] === 'LTC') {
 
-        self.doOrderAutoBTCEscrow(txHash, params, 'buy');  
+        self.doOrderAutoLTCEscrow(txHash, params, 'buy');  
 
       } else {  
 
@@ -726,10 +726,10 @@ function ExchangeViewModel() {
 
       }
       
-      //if the order involes selling BTC, then we want to notify the servers of our wallet_id so folks can see if our
-      // wallet is "online", in order to determine if we'd be able to best make the necessary BTCpay
-      if(self.quoteAsset() == 'BTC' && addressType !== 'armory') {
-        multiAPI("record_btc_open_order", {'wallet_id': WALLET.identifier(), 'order_tx_hash': txHash});
+      //if the order involes selling LTC, then we want to notify the servers of our wallet_id so folks can see if our
+      // wallet is "online", in order to determine if we'd be able to best make the necessary LTCpay
+      if(self.quoteAsset() == 'LTC' && addressType !== 'armory') {
+        multiAPI("record_ltc_open_order", {'wallet_id': WALLET.identifier(), 'order_tx_hash': txHash});
       }
     }
 
@@ -764,17 +764,17 @@ function ExchangeViewModel() {
     message += '<tr><td><b>' + i18n.t('total') + ': </b></td><td style="text-align:right">' + self.buyTotal() + '</td><td>' + self.quoteAsset() + '</td></tr>';
     message += '<tr><td><b>' + i18n.t('real_estimated_total') + ': </b></td><td style="text-align:right">' + estimatedTotalPrice + '</td><td>' + self.quoteAsset() + '</td></tr>';
     
-    if (self.quoteAsset() == 'BTC') {
+    if (self.quoteAsset() == 'LTC') {
       message += '<tr><td><b>' + i18n.t('provided_fee') + ': </b></td><td style="text-align:right">' + self.buyFee() + '</td><td>' + self.quoteAsset() + '</td></tr>';
       message += '<tr><td colspan="3"><i>' + i18n.t('these_fees_are_optional') + '</i></td></tr>';
     }
 
-    if(PREFERENCES['btcpay_method'] === 'autoescrow' && self.quoteAsset() === 'BTC') {    
+    if(PREFERENCES['ltcpay_method'] === 'autoescrow' && self.quoteAsset() === 'LTC') {    
       message += '<tr><td colspan="3"><p class="bg-info padding-10">';
-      message += i18n.t('btc_escrow_confirm');
+      message += i18n.t('ltc_escrow_confirm');
       message += '</p></td></tr>';
       message += '<tr><td><b>' + i18n.t('escrow_commission') + ': </b></td><td style="text-align:right">' + smartFormat(mulFloat(self.buyTotal(), ESCROW_COMMISSION)) + '</td><td>' + self.quoteAsset() + '</td></tr>';
-      message += '<tr><td><b>' + i18n.t('btcpay_retaining_fee') + ': </b></td><td style="text-align:right">' + normalizeQuantity(BTCPAY_FEE_RETAINER) + '</td><td>' + self.quoteAsset() + '</td></tr>';
+      message += '<tr><td><b>' + i18n.t('ltcpay_retaining_fee') + ': </b></td><td style="text-align:right">' + normalizeQuantity(LTCPAY_FEE_RETAINER) + '</td><td>' + self.quoteAsset() + '</td></tr>';
     }
 
     message += '</table>';
@@ -852,8 +852,8 @@ function ExchangeViewModel() {
       'asset1': self.asset1(),
       'asset2': self.asset2(),
       'addresses': WALLET.getAddressesList(),
-      'min_fee_provided': WALLET_OPTIONS_MODAL.minBTCFeeProvidedPct(),
-      'max_fee_required': WALLET_OPTIONS_MODAL.maxBTCFeeRequiredPct()
+      'min_fee_provided': WALLET_OPTIONS_MODAL.minLTCFeeProvidedPct(),
+      'max_fee_required': WALLET_OPTIONS_MODAL.maxLTCFeeRequiredPct()
     }
     failoverAPI('get_market_orders', params, self.displayOpenUserOrders);
   }
@@ -950,8 +950,8 @@ function ExchangeViewModel() {
     var buy_orders = [];
 
     for (var i in data['buy_orders']) {
-      if ((data['base_asset'] == 'BTC' && data['buy_orders'][i]['amount'] < BTC_ORDER_MIN_AMOUNT) || 
-          (data['quote_asset'] == 'BTC' && data['buy_orders'][i]['total'] < BTC_ORDER_MIN_AMOUNT) ||
+      if ((data['base_asset'] == 'LTC' && data['buy_orders'][i]['amount'] < LTC_ORDER_MIN_AMOUNT) || 
+          (data['quote_asset'] == 'LTC' && data['buy_orders'][i]['total'] < LTC_ORDER_MIN_AMOUNT) ||
           (data['sell_orders'].length > 0 && data['buy_orders'][i]['price'] >= data['sell_orders'][0]['price'])) {
         data['buy_orders'][i]['exclude'] = true;
       } else {
@@ -980,8 +980,8 @@ function ExchangeViewModel() {
     }
     base_depth = 0;
     for (var i in data['sell_orders']) {
-      if ((data['base_asset'] == 'BTC' && data['sell_orders'][i]['amount'] < BTC_ORDER_MIN_AMOUNT) || 
-          (data['quote_asset'] == 'BTC' && data['sell_orders'][i]['total'] < BTC_ORDER_MIN_AMOUNT)) {
+      if ((data['base_asset'] == 'LTC' && data['sell_orders'][i]['amount'] < LTC_ORDER_MIN_AMOUNT) || 
+          (data['quote_asset'] == 'LTC' && data['sell_orders'][i]['total'] < LTC_ORDER_MIN_AMOUNT)) {
         data['sell_orders'][i]['exclude'] = true;
       } else {
         if (base_depth == 0) {
@@ -1031,7 +1031,7 @@ function ExchangeViewModel() {
 
   self.selectMarket = function(item) {
     self.asset1(item.base_asset);
-    if (item.quote_asset == 'BTC' || item.quote_asset == 'XCP') {
+    if (item.quote_asset == 'LTC' || item.quote_asset == 'XPT') {
       self.selectedQuoteAsset(item.quote_asset);
     } else {
       self.selectedQuoteAsset('Other');
@@ -1051,8 +1051,8 @@ function ExchangeViewModel() {
     var params = {
       'asset1': self.asset2(),
       'asset2': self.asset1(),
-      'min_fee_provided': WALLET_OPTIONS_MODAL.minBTCFeeProvidedPct(),
-      'max_fee_required': WALLET_OPTIONS_MODAL.maxBTCFeeRequiredPct()
+      'min_fee_provided': WALLET_OPTIONS_MODAL.minLTCFeeProvidedPct(),
+      'max_fee_required': WALLET_OPTIONS_MODAL.maxLTCFeeRequiredPct()
     }
     failoverAPI('get_market_details', params, self.displayMarketDetails);
   }
@@ -1063,7 +1063,7 @@ function ExchangeViewModel() {
     
     //Get a list of all assets
     failoverAPI("get_asset_names", {}, function(data, endpoint) {
-      data = ['XCP', 'BTC'].concat(data);
+      data = ['XPT', 'LTC'].concat(data);
       self.allAssets(data);
       
       //Set up typeahead bindings manually for now (can't get knockout and typeahead playing well together...)
@@ -1118,9 +1118,9 @@ function ExchangeViewModel() {
 
     } else {
 
-      var message = i18n.t('cancel_consume_btc');
-      if (self.quoteAsset() == 'BTC' && order.type == 'BUY') {
-        message += '<br />' + i18n.t('we_recommend_to_use_xcp');
+      var message = i18n.t('cancel_consume_ltc');
+      if (self.quoteAsset() == 'LTC' && order.type == 'BUY') {
+        message += '<br />' + i18n.t('we_recommend_to_use_xpt');
       }
 
       bootbox.dialog({
@@ -1378,9 +1378,9 @@ function OpenOrdersViewModel() {
 
     } else {
 
-      var message = i18n.t('cancel_consume_btc');
-      if (order.give_quantity_str.indexOf('BTC') != -1) {
-        message += '<br />' + i18n.t('we_recommend_to_use_xcp');
+      var message = i18n.t('cancel_consume_ltc');
+      if (order.give_quantity_str.indexOf('LTC') != -1) {
+        message += '<br />' + i18n.t('we_recommend_to_use_xpt');
       }
 
       bootbox.dialog({

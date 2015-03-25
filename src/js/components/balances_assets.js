@@ -153,7 +153,7 @@ function CreateAssetModalViewModel() {
           message = i18n.t("token_has_been_created", self.name());
         }
         message +=  "<br/><br/>";
-        message += i18n.t("issuance_end_message", getAddressLabel(self.address()), ASSET_CREATION_FEE_XCP);
+        message += i18n.t("issuance_end_message", getAddressLabel(self.address()), ASSET_CREATION_FEE_XPT);
 
         WALLET.showTransactionCompleteDialog(message + " " + i18n.t(ACTION_PENDING_NOTICE), message, armoryUTx);
       }
@@ -276,8 +276,8 @@ function TransferAssetModalViewModel() {
   
   self.destAddress = ko.observable('').trimmed().extend({
     required: true,
-    isValidBitcoinAddress: self,
-    isNotSameBitcoinAddress: self
+    isValidLitecoinAddress: self,
+    isNotSameLitecoinAddress: self
   });
   
   self.validationModel = ko.validatedObservable({
@@ -585,7 +585,7 @@ function PayDividendModalViewModel() {
     }
     
     // fetch shareholders to check transaction dest.
-    if (self.selectedDividendAsset() == 'BTC') {
+    if (self.selectedDividendAsset() == 'LTC') {
       var params = {
         'filters': [
           {'field': 'asset', 'op': '=', 'value': self.assetData().asset},
@@ -613,7 +613,7 @@ function PayDividendModalViewModel() {
       for (var a in data) {
         dests.push(data[a]['address']);
       }
-      params['_btc_dividend_dests'] = dests;
+      params['_ltc_dividend_dests'] = dests;
     }
 
     WALLET.doTransaction(self.addressVM().ADDRESS, "create_dividend", params,
@@ -647,10 +647,10 @@ function PayDividendModalViewModel() {
           self.availableDividendAssets.push(new DividendAssetInDropdownItemModel(data[i]['asset'], data[i]['quantity'], data[i]['normalized_quantity']));
       }
 
-      //Also get the BTC balance at this address and put at head of the list
-      WALLET.retrieveBTCBalance(address.ADDRESS, function(balance) {
+      //Also get the LTC balance at this address and put at head of the list
+      WALLET.retrieveLTCBalance(address.ADDRESS, function(balance) {
         if(balance) {
-          self.availableDividendAssets.unshift(new DividendAssetInDropdownItemModel("BTC", balance, normalizeQuantity(balance)));
+          self.availableDividendAssets.unshift(new DividendAssetInDropdownItemModel("LTC", balance, normalizeQuantity(balance)));
         }
       });
     });
@@ -683,8 +683,8 @@ function CallAssetModalViewModel() {
     min: 0.00001,
     validation: {
       validator: function (val, self) {
-        if(self.xcpBalRemainingPostCall() === null) return true; //wait until dividend asset chosen to validate
-        return self.xcpBalRemainingPostCall() >= 0;
+        if(self.xptBalRemainingPostCall() === null) return true; //wait until dividend asset chosen to validate
+        return self.xptBalRemainingPostCall() >= 0;
       },
       message: i18n.t('total_diviend_exceed_balance'),
       params: self
@@ -730,30 +730,30 @@ function CallAssetModalViewModel() {
     return smartFormat(self.unitsAfterCallback(), null, 4); 
   }, self); 
 
-  self.totalXCPPay = ko.computed(function() {
+  self.totalXPTPay = ko.computed(function() {
     if(!self.percentageToCall() || !self.assetObj()) return null;
     return +(self.percentageToCall() * (self.assetObj().normalizedTotalIssued() - self.assetObj().normalizedBalance()) * self.assetObj().CALLPRICE).toFixed(4);
   }, self);
 
-  self.xcpBalRemainingPostCall = ko.computed(function() {
-    if(self.totalXCPPay() === null) return null;
-    return Decimal.round(new Decimal(WALLET.getBalance(self.address(), 'XCP')).sub(self.totalXCPPay()), 8, Decimal.MidpointRounding.ToEven).toFloat();
+  self.xptBalRemainingPostCall = ko.computed(function() {
+    if(self.totalXPTPay() === null) return null;
+    return Decimal.round(new Decimal(WALLET.getBalance(self.address(), 'XPT')).sub(self.totalXPTPay()), 8, Decimal.MidpointRounding.ToEven).toFloat();
   }, self);
   
-  self.xcpBalRemainingPostCallIsSet = ko.computed(function() {
-    return self.xcpBalRemainingPostCall() !== null;
+  self.xptBalRemainingPostCallIsSet = ko.computed(function() {
+    return self.xptBalRemainingPostCall() !== null;
   }, self);
 
-  self.dispXCPBalRemainingPostCall = ko.computed(function() {
-    return smartFormat(self.xcpBalRemainingPostCall(), null, 4);
+  self.dispXPTBalRemainingPostCall = ko.computed(function() {
+    return smartFormat(self.xptBalRemainingPostCall(), null, 4);
   }, self);
   
   self.validationModel = ko.validatedObservable({
     percentageToCall: self.percentageToCall
   });
 
-  self.dispXCPBalRemainingPostCallCss = ko.computed(function() {
-    return self.xcpBalRemainingPostCall() < 0 ? 'errorColor' : 'sellColor';
+  self.dispXPTBalRemainingPostCallCss = ko.computed(function() {
+    return self.xptBalRemainingPostCall() < 0 ? 'errorColor' : 'sellColor';
   }, self);
 
   self.resetForm = function() {
@@ -781,9 +781,9 @@ function CallAssetModalViewModel() {
 
         var message = "";
         if (armoryUTx) {
-          message = i18n.t("you_will_calling_back", self.percentageToCall(), self.asset(), self.totalXCPPay());
+          message = i18n.t("you_will_calling_back", self.percentageToCall(), self.asset(), self.totalXPTPay());
         } else {
-          message = i18n.t("you_have_called_back", self.percentageToCall(), self.asset(), self.totalXCPPay());
+          message = i18n.t("you_have_called_back", self.percentageToCall(), self.asset(), self.totalXPTPay());
         }
         
         WALLET.showTransactionCompleteDialog(message + " " + i18n.t(ACTION_PENDING_NOTICE), message, armoryUTx);

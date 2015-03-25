@@ -11,7 +11,7 @@ var MAX_ADDRESSES = 20; //arbitrary (but will generate more on login if they hav
 
 //Order expiration
 var ORDER_DEFAULT_EXPIRATION = 1000; //num blocks until expiration (at ~9 min per block this is ~6.75 days)
-var ORDER_BTCSELL_DEFAULT_EXPIRATION = 2000; //num blocks until expiration for selling BTC order
+var ORDER_LTCSELL_DEFAULT_EXPIRATION = 2000; //num blocks until expiration for selling LTC order
 var ORDER_MAX_EXPIRATION = 3000; //max expiration for order
 
 var STATS_MAX_NUM_TRANSACTIONS = 100; //max # transactions to show in the table
@@ -24,7 +24,7 @@ var MARKET_INFO_REFRESH_EVERY = 5 * 60 * 1000; //refresh market info every 5 min
 
 var CHAT_NUM_USERS_ONLINE_REFRESH_EVERY = 5 * 60 * 1000; //refresh online user count every 5 minutes while enabled
 
-var NUM_BLOCKS_TO_WAIT_FOR_BTCPAY = 6; //number of blocks to wait until the user can make a BTCpay on an order match where they owe BTC
+var NUM_BLOCKS_TO_WAIT_FOR_LTCPAY = 6; //number of blocks to wait until the user can make a LTCpay on an order match where they owe LTC
 
 var ALLOW_UNCONFIRMED_INPUTS = true;  // allow use unconfirmed unspents
 
@@ -40,7 +40,7 @@ var DEFAULT_PREFERENCES = {
   'selected_lang': 'en-us',
   'watch_only_addresses': [],
   'armory_offline_addresses': [],
-  'btcpay_method': 'autoescrow', //valid values are 'autoescrow', 'auto', and 'manual'
+  'ltcpay_method': 'autoescrow', //valid values are 'autoescrow', 'auto', and 'manual'
   'has_accepted_license': false
 };
 
@@ -62,7 +62,7 @@ var CURRENT_PAGE_URL = ''; // set in loadUrl()
 
 //selective disablement
 var DISABLED_FEATURES_SUPPORTED = ['betting', 'rps', 'dividend', 'exchange', 'leaderboard', 'portfolio', 'stats', 'history']; //what can be disabled
-var DISABLED_FEATURES = []; //set in counterwallet.js
+var DISABLED_FEATURES = []; //set in paywallet.js
 
 // restricted action
 var RESTRICTED_AREA = {
@@ -75,17 +75,17 @@ var RESTRICTED_AREA = {
 }
 
 var RESTRICTED_AREA_MESSAGE = {
-  'pages/simplebuy.html': 'buy_xcp_if_legal'
+  'pages/simplebuy.html': 'buy_xpt_if_legal'
 }
 
 var MAX_SUPPORT_CASE_PROBLEM_LEN = 4096;
-var QUOTE_ASSETS = []; // initalized with counterblock is_ready()
+var QUOTE_ASSETS = []; // initalized with payblock is_ready()
 
 var QUICK_BUY_ENABLE = false;
 
-var AUTO_BTC_ESCROW_ENABLE = false;
+var AUTO_LTC_ESCROW_ENABLE = false;
 var ESCROW_COMMISSION;
-var BTCPAY_FEE_RETAINER;
+var LTCPAY_FEE_RETAINER;
 
 var BETTING_ENABLE = true;
 var GAMING_ENABLE = true;
