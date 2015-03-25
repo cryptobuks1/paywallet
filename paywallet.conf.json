@@ -1,0 +1,16 @@
+{
+  "servers": [ "https://wallet.paytokens.co" ],
+  "forceTestnet": false,
+  "googleAnalyticsUA": "UA-21065583-29",
+  "googleAnalyticsUA-testnet": "UA-21065583-29",
+  "rollbarAccessToken": "39d23b5a512f4169c98fc922f0d1b121",
+  "disabledFeatures": [ ],
+  "restrictedAreas": {
+    "pages/betting.html": ["US"],
+    "pages/openbets.html": ["US"],
+    "pages/matchedbets.html": ["US"],
+    "pages/rps.html": ["US"],
+    "dividend": ["US"]
+  },
+  "autoLTCEscrowServer": ""
+}
