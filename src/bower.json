@@ -29,7 +29,7 @@
         "knockout-validation": "1.0.2",
         "moment": "2.5.1",
         "sjcl": "1.0.0",
-        "socket.io-client": "https://github.com/socketio/socket.io-client.git#98c1bc84965320c9402bda4a07cfe9f46605323a",
+        "socket.io-client": "https://github.com/socketio/socket.io-client.git#98e3c135b48d2e8af0ee9db6a44ff8ddaf9024f6",
         "typeahead.js": "0.10.2",
         "select2": "3.4.6",
         "font-awesome": "4.0.3",
